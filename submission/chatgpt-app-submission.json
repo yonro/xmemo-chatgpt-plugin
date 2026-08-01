@@ -1,0 +1,307 @@
+{
+  "$schema": "https://developers.openai.com/apps-sdk/schemas/chatgpt-app-submission.v1.json",
+  "schema_version": 1,
+  "app_info": {
+    "display_name": "XMemo",
+    "subtitle": "Memory across conversations",
+    "description": "XMemo gives ChatGPT a private, persistent workspace that carries useful context across conversations. It can save, search, recall, explain, update, and organize preferences, decisions, project context, reference notes, TODOs, and personal Ledger records. Interactive TODO Board, Ledger, and Project Workspace views turn remembered context into structured work without leaving ChatGPT. OAuth and server-enforced scopes restrict every operation to the signed-in user's authorized data, while recoverable deletion, restoration, and explicit confirmation for permanent deletion keep users in control.",
+    "category": "PRODUCTIVITY",
+    "website_url": "https://xmemo.dev",
+    "privacy_policy_url": "https://xmemo.dev/legal/privacy",
+    "support_email": "support@xmemo.dev"
+  },
+  "tools": {
+    "get_mcp_identity": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only returns the authenticated XMemo connector identity, account context, scopes, and tenant metadata.",
+        "open_world_justification": "Does not write to public internet state or third-party systems.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible actions."
+      }
+    },
+    "remember": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or deduplicates one durable memory and automatically attaches a valid Projects path only when that formal project already exists.",
+        "open_world_justification": "Writes only to the authenticated user's private or authorized scoped XMemo workspace. It does not create projects or send data to public or third-party systems.",
+        "destructive_justification": "Creates or updates bounded XMemo memory records without deleting or irreversibly removing content. A missing project must be created explicitly through project(entity='project', action='create')."
+      }
+    },
+    "record_event": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Records a significant event, milestone, decision, or handoff in the authenticated user's XMemo timeline.",
+        "open_world_justification": "Writes only to the authenticated user's private or scoped XMemo workspace.",
+        "destructive_justification": "Appends a bounded timeline event without deleting or overwriting existing memory content."
+      }
+    },
+    "update_state": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Upserts bounded working state such as the current task, next action, or blocker in the authenticated user's XMemo workspace.",
+        "open_world_justification": "Writes only to the authenticated user's private or scoped XMemo workspace.",
+        "destructive_justification": "Updates an expiring working-state record without deleting durable memories or bypassing tenant scope."
+      }
+    },
+    "todo": {
+      "annotations": {"readOnlyHint": false, "openWorldHint": false, "destructiveHint": false},
+      "justifications": {
+        "read_only_justification": "Creates, updates, completes, or lists authorized TODOs in the user's XMemo workspace.",
+        "open_world_justification": "Reads and writes only the authenticated user's private or scoped XMemo workspace.",
+        "destructive_justification": "This dispatcher does not delete TODOs or bypass confirmation; an explicit request to remove a specific TODO is routed separately to forget with its exact TODO ID."
+      }
+    },
+    "ledger": {
+      "annotations": {"readOnlyHint": false, "openWorldHint": false, "destructiveHint": false},
+      "justifications": {
+        "read_only_justification": "Records, lists, summarizes, or updates authorized Ledger data and renewal reminders for the user's external services.",
+        "open_world_justification": "Reads and writes only the authenticated user's private or scoped XMemo workspace.",
+        "destructive_justification": "Does not delete transactions or contact, cancel, or modify external services."
+      }
+    },
+    "project": {
+      "annotations": {"readOnlyHint": false, "openWorldHint": false, "destructiveHint": false},
+      "justifications": {
+        "read_only_justification": "Creates an explicitly requested project or updates records in a project authorized by the caller's server-enforced grant.",
+        "open_world_justification": "Creates or updates only the authenticated user's authorized XMemo project workspace and does not publish to external systems.",
+        "destructive_justification": "Does not provide deletion actions. Project creation is explicit and idempotently reuses the same canonical project; edits preserve authorization and version checks."
+      }
+    },
+    "update_memory": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Updates the content, location, or memory type of one user-selected visible XMemo memory.",
+        "open_world_justification": "Writes only to the authenticated user's private or scoped XMemo workspace.",
+        "destructive_justification": "Updates a selected memory through XMemo's versioned write path; prior versions remain available for audit and recovery, and the tool does not delete records or perform permanent removal."
+      }
+    },
+    "recall": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Retrieves the most relevant visible memories without changing them.",
+        "open_world_justification": "Does not write to public internet state or third-party systems.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible actions."
+      }
+    },
+    "search_memory": {
+      "annotations": {"readOnlyHint": true, "openWorldHint": false, "destructiveHint": false},
+      "justifications": {
+        "read_only_justification": "Searches visible scoped or team memory records without modifying them.",
+        "open_world_justification": "Does not write to public internet state or third-party systems.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible actions."
+      }
+    },
+    "recall_context": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Builds a bounded context package from visible memories without changing them.",
+        "open_world_justification": "Does not write to public internet state or third-party systems.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible actions."
+      }
+    },
+    "memory_overview": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Returns a user-facing overview of visible memories without modifying them.",
+        "open_world_justification": "Does not write to public internet state or third-party systems.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible actions."
+      }
+    },
+    "analyze_memory_text": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Counts an exact word or phrase across visible user memories without modifying records.",
+        "open_world_justification": "Does not write to public internet state or third-party systems.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible actions."
+      }
+    },
+    "explain_memory": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Explains a selected visible memory using retrieval and version signals without modifying it.",
+        "open_world_justification": "Does not write to public internet state or third-party systems.",
+        "destructive_justification": "Does not delete, overwrite, revoke access, or perform irreversible actions."
+      }
+    },
+    "forget": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes one user-selected visible XMemo memory, TODO, or Ledger record by target or exact memory_id; defaults to a recoverable soft delete, with permanent deletion only via an explicit mode='hard' parameter.",
+        "open_world_justification": "Changes only private or scoped XMemo memory state for the authenticated account.",
+        "destructive_justification": "By default soft-deletes the selected memory or TODO (recoverable with restore_memory); when the user explicitly confirms permanent deletion and mode='hard' is passed, removes the memory, its version history, conflicts, and corresponding Ledger row irrecoverably."
+      }
+    },
+    "restore_memory": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Restores one user-selected soft-deleted XMemo memory and changes only the authenticated user workspace.",
+        "open_world_justification": "Changes only private or scoped XMemo memory state for the authenticated account.",
+        "destructive_justification": "Reverses a recoverable soft deletion by returning a selected memory to active status; it does not erase content, history, or other records."
+      }
+    },
+    "open_todo_board": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Opens the TODO Board workspace widget to let the user browse and manage their tasks in a visual fullscreen board.",
+        "open_world_justification": "Does not query external internet APIs; only runs within the authorized XMemo workspace.",
+        "destructive_justification": "Does not perform destructive changes or delete any records."
+      }
+    },
+    "open_ledger": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Opens the Ledger workspace widget and returns an authorized first-hydrate Net flow view without changing any records.",
+        "open_world_justification": "Does not query external internet APIs; it reads only the authenticated user's authorized XMemo Ledger data.",
+        "destructive_justification": "Does not record, update, or delete transactions. Writes remain in the dedicated add_expense flow."
+      }
+    },
+    "get_project_summary": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Returns a bounded quick-answer summary for one exact authorized project as concise text without changing any records.",
+        "open_world_justification": "Does not query external internet APIs; it reads only the authenticated user's authorized XMemo project data.",
+        "destructive_justification": "Does not create, update, or delete any records; it is a read-only summary projection."
+      }
+    },
+    "open_project_workspace": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Opens Project Workspaces Home (the caller's authorized project list) or, for an exact/uniquely resolved project, that Project Workspace's authorized initial view; no records are changed.",
+        "open_world_justification": "Does not query external internet APIs; it reads only the authenticated user's authorized XMemo project data, and natural-language project references resolve only within that authorized grant set.",
+        "destructive_justification": "Does not perform destructive changes or delete any records; project administration stays in the confirmed Chat/admin flow."
+      }
+    }
+  },
+  "test_cases": [
+    {
+      "description": "Create one explicitly requested project, save its first memory, and recall it.",
+      "user_prompt": "Create an XMemo project named AI Short Drama Platform. Save that its first launch market is Japan, then recall the project context.",
+      "file_attachment_urls": null,
+      "tools_triggered": "project, remember, get_project_summary",
+      "expected_output": "XMemo explicitly creates the missing AI Short Drama Platform workspace through project(entity='project', action='create'), saves the launch-market memory under its canonical project scope, and recalls the authorized project context. Repeating the request reuses the same project instead of creating a duplicate.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Record an expense and open the visual Ledger workspace.",
+      "user_prompt": "I spent 12 dollars on lunch today. Save it, then open my Ledger so I can review this month's cash flow.",
+      "file_attachment_urls": null,
+      "tools_triggered": "ledger, open_ledger",
+      "expected_output": "The $12.00 lunch expense is recorded in the private XMemo Ledger, then the visual Ledger workspace opens with the current period summary. The response does not claim a fixed monthly total.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Route visual TODO workspace intent to the Open Workspace tool.",
+      "user_prompt": "Open my TODOs so I can browse work in progress and manage the board.",
+      "file_attachment_urls": null,
+      "tools_triggered": "open_todo_board",
+      "expected_output": "The TODO Board opens as a widget with the first hydrated task view. It does not use the text-only TODO listing or perform a mutation.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Route a concise TODO count to text, not the workspace.",
+      "user_prompt": "How many TODOs do I have? Give me a concise text answer.",
+      "file_attachment_urls": null,
+      "tools_triggered": "todo",
+      "expected_output": "The app returns a concise text answer from the TODO list and does not open the TODO Board workspace.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Open Project Workspaces Home for project exploration.",
+      "user_prompt": "Open Project Workspace so I can choose one of my projects.",
+      "file_attachment_urls": null,
+      "tools_triggered": "open_project_workspace",
+      "expected_output": "Project Workspaces Home opens with only the reviewer's authorized project list. No project is guessed and no project record is changed.",
+      "expected_output_url": null
+    }
+  ],
+  "negative_test_cases": [
+    {
+      "description": "Do not trigger for unrelated calendar scheduling.",
+      "user_prompt": "Schedule a meeting with Alice tomorrow at 3 PM.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not be invoked because XMemo does not manage external calendars.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not request raw secrets when authorization is missing.",
+      "user_prompt": "Use XMemo without OAuth; I can paste my token here if needed.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should ask the user to authorize or reconnect XMemo and should not request raw bearer tokens in chat.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not expose an in-widget TODO deletion route.",
+      "user_prompt": "Delete this TODO from the board.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app must keep deletion in the Chat confirmation flow and expose no in-widget delete action. For a single TODO it must use forget with the exact TODO ID; todo(action='delete_all', confirm_delete_all=true) is reserved for an explicit request to clear every matching TODO.",
+      "expected_output_url": null
+    }
+  ]
+}

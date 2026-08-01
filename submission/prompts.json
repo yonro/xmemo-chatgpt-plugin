@@ -1,0 +1,29 @@
+{
+  "prompts": [
+    {
+      "id": "todo_board",
+      "prompt": "Open my TODO Board and help me prioritize overdue, blocked, and in-progress work.",
+      "screenshot": "figma-template-exports/01-open-todo-board-figma-2x.png",
+      "purpose": "Demonstrates the real XMemo TODO Board inline Widget with current focus, status counts, and direct task actions."
+    },
+    {
+      "id": "ledger",
+      "prompt": "Open my Ledger and show this month's net flow, income, expenses, and largest category.",
+      "screenshot": "figma-template-exports/02-open-ledger-figma-2x.png",
+      "purpose": "Demonstrates the real XMemo Ledger inline Widget with an at-a-glance monthly financial summary and direct actions."
+    },
+    {
+      "id": "project_workspace",
+      "prompt": "Open my Project Workspace and show the current focus, blockers, and related TODOs.",
+      "screenshot": "figma-template-exports/03-open-project-workspace-figma-2x.png",
+      "purpose": "Demonstrates the real XMemo Project Workspace inline Widget with project health, current attention, and a direct workspace action."
+    }
+  ],
+  "submission_notes": [
+    "Enter only the prompt text in the submission form; ChatGPT adds the XMemo plugin mention automatically.",
+    "Upload the matching screenshot for each prompt.",
+    "Each screenshot is a 706 px-wide PNG within the portal's accepted 400–860 px height range: TODO Board 706 x 479, Ledger 706 x 479, and Project Workspace 706 x 415.",
+    "The screenshots render the current repository's real XMemo React Widgets with typed synthetic fixtures; they contain no private user data.",
+    "No ChatGPT UI, browser chrome, user prompt, marketing overlay, decorative preview background, or extra embedded localization copy is included."
+  ]
+}
