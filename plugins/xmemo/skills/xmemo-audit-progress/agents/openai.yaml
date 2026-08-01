@@ -1,0 +1,4 @@
+interface:
+  display_name: "XMemo Audit Progress"
+  short_description: "Audit progress claims against plans and evidence"
+  default_prompt: "Use $xmemo-audit-progress to verify this progress report against the approved plan."

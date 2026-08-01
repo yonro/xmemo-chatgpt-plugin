@@ -23,7 +23,7 @@
   "interface": {
     "displayName": "XMemo",
     "shortDescription": "Your durable memory across AI agents.",
-    "longDescription": "XMemo gives ChatGPT and Codex a private, user-controlled workspace for decisions, project context, approved plans, TODOs, progress checkpoints, and handoffs. Recall what was decided, resume from the latest verified state, and keep compatible AI agents working from the same durable context.",
+    "longDescription": "XMemo gives ChatGPT and Codex a private, user-controlled workspace for decisions, project context, approved plans, TODOs, progress checkpoints, and handoffs. Eight professional skills help brainstorm, plan, review, audit, distill, resume, and transfer work while keeping compatible AI agents aligned through the same durable context.",
     "developerName": "Yonro",
     "category": "Productivity",
     "capabilities": [

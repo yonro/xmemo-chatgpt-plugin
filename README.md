@@ -17,6 +17,25 @@ This repository is the public release layer for the XMemo OpenAI integration. It
 - Prepare reliable handoffs between ChatGPT, Codex, Claude, and other compatible agents.
 - Open XMemo's TODO Board, Ledger, and Project Workspace widgets in supported ChatGPT surfaces.
 
+## Professional skills
+
+The plugin ships eight focused skills. They share the same public XMemo tool
+contract and add no hidden tools or background automation.
+
+| Skill | Workflow |
+| --- | --- |
+| `xmemo-memory-steward` | Route mixed recall, save, lifecycle, and checkpoint work safely. |
+| `xmemo-brainstorm` | Recall constraints, explore distinct options, challenge assumptions, and preserve only the approved direction. |
+| `xmemo-plan-project` | Produce evidence-gated `PROJECT_PLAN.md` and `EXECUTION_PLAN.md` artifacts. |
+| `xmemo-review-plan` | Review a proposal against saved decisions, risks, and acceptance criteria. |
+| `xmemo-audit-progress` | Verify progress claims against plans, files, tests, deployments, and other evidence. |
+| `xmemo-distill-session` | Convert an important conversation into durable decisions, actions, and unfinished state. |
+| `xmemo-resume-work` | Reconstruct a verified Resume Brief and continue from one exact next action. |
+| `xmemo-handoff-work` | Prepare or reconcile restart-ready handoffs across compatible agents. |
+
+This initial release intentionally contains no Hooks. Checkpoints and memory
+writes occur only through an explicit user request or an active skill workflow.
+
 ## Repository layout
 
 ```text
@@ -24,7 +43,7 @@ This repository is the public release layer for the XMemo OpenAI integration. It
 plugins/xmemo/                         Installable XMemo plugin package
   .codex-plugin/plugin.json            Stable plugin identity and directory metadata
   .mcp.json                            Production XMemo MCP endpoint
-  skills/xmemo-memory-steward/         Professional memory workflow
+  skills/                              Eight professional XMemo workflows
   assets/                              Icons and compliant product screenshots
 submission/                            Submitted ChatGPT review snapshot
 docs/                                  Architecture and release documentation

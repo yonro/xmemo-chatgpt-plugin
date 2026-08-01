@@ -1,0 +1,4 @@
+interface:
+  display_name: "XMemo Brainstorm"
+  short_description: "Explore and converge ideas with durable context"
+  default_prompt: "Use $xmemo-brainstorm to explore options against my saved XMemo context."

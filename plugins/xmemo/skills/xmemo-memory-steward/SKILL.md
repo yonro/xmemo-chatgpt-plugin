@@ -9,6 +9,22 @@ Operate XMemo as a user-owned memory system, not a transcript archive. Follow:
 
 **scope → recall → act → distill → checkpoint → receipt**
 
+Use this Skill for mixed memory work or lifecycle operations. Prefer a focused
+companion Skill when one workflow dominates:
+
+| Workflow | Focused Skill |
+| --- | --- |
+| Explore and converge ideas against saved context | `$xmemo-brainstorm` |
+| Design project and execution-plan Markdown | `$xmemo-plan-project` |
+| Review a plan against durable decisions | `$xmemo-review-plan` |
+| Audit implementation progress and evidence | `$xmemo-audit-progress` |
+| Distill an important session into durable outcomes | `$xmemo-distill-session` |
+| Recover verified state and continue work | `$xmemo-resume-work` |
+| Prepare or reconcile a cross-agent handoff | `$xmemo-handoff-work` |
+
+These focused Skills share this Skill's 20-tool public contract and safety
+rules. They do not add background automation or expose additional tools.
+
 ## 1. Establish intent and scope
 
 Identify the requested outcome before calling a tool:
@@ -26,6 +42,10 @@ Identify the requested outcome before calling a tool:
 Stay within the authenticated account, project, bucket, and scope. If XMemo is
 unavailable or authorization is missing, say that nothing was read or written;
 never simulate a successful memory operation.
+
+Use `get_mcp_identity` only when connection identity, authorization, or the
+active public tool surface needs verification. Treat identity metadata as
+diagnostic context and do not expose raw internal identifiers unnecessarily.
 
 ## 2. Recall only when it can help
 

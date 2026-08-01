@@ -22,6 +22,21 @@ SECRET_PATTERNS = {
     "Private key": re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
     "Reviewer password": re.compile(r"(?i)reviewer.{0,32}password\s*[:=]"),
 }
+EXPECTED_SKILLS = {
+    "xmemo-memory-steward",
+    "xmemo-brainstorm",
+    "xmemo-plan-project",
+    "xmemo-review-plan",
+    "xmemo-audit-progress",
+    "xmemo-distill-session",
+    "xmemo-resume-work",
+    "xmemo-handoff-work",
+}
+UNSUPPORTED_OPENAI_TOOLS = {
+    "get_project_context",
+    "create_pending_decision",
+    "resolve_decision",
+}
 
 
 def load_json(path: Path) -> dict:
@@ -81,6 +96,24 @@ def validate_submission() -> None:
     assert len(submission.get("negative_test_cases", [])) == 3
 
 
+def validate_skills() -> None:
+    skills_root = PLUGIN / "skills"
+    actual = {path.name for path in skills_root.iterdir() if path.is_dir()}
+    assert actual == EXPECTED_SKILLS, f"Unexpected skill set: {sorted(actual)}"
+    for name in sorted(EXPECTED_SKILLS):
+        skill_file = skills_root / name / "SKILL.md"
+        metadata_file = skills_root / name / "agents" / "openai.yaml"
+        require_file(skill_file)
+        require_file(metadata_file)
+        text = skill_file.read_text(encoding="utf-8")
+        assert text.startswith("---\n") or text.startswith("---\r\n")
+        assert f"name: {name}" in text.split("---", 2)[1]
+        assert "[TODO:" not in text, f"{name} contains an unresolved template placeholder"
+        for tool in UNSUPPORTED_OPENAI_TOOLS:
+            assert f"`{tool}`" not in text, f"{name} references unavailable tool {tool}"
+    assert not (PLUGIN / "hooks").exists(), "The initial OpenAI plugin release must remain Hook-free"
+
+
 def scan_secrets() -> None:
     ignored_parts = {".git", "dist", "build", "__pycache__"}
     text_suffixes = {".json", ".md", ".py", ".ps1", ".yml", ".yaml", ".txt", ".toml"}
@@ -104,6 +137,7 @@ def main() -> int:
     validate_mcp()
     validate_marketplace()
     validate_submission()
+    validate_skills()
     scan_secrets()
     print(f"OK: XMemo plugin repository v{version} is structurally valid and secret scan is clean.")
     return 0

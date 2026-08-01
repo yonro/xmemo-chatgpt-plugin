@@ -1,0 +1,4 @@
+interface:
+  display_name: "XMemo Resume Work"
+  short_description: "Recover verified context and continue from the next action"
+  default_prompt: "Use $xmemo-resume-work to bring me up to speed and continue from the latest verified state."

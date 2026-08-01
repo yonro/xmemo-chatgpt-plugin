@@ -1,0 +1,4 @@
+interface:
+  display_name: "XMemo Distill Session"
+  short_description: "Preserve durable outcomes from an important session"
+  default_prompt: "Use $xmemo-distill-session to preserve the decisions, next actions, and unfinished state from this session."
