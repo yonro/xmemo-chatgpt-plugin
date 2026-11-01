@@ -2,3 +2,11 @@ interface:
   display_name: "XMemo Audit Progress"
   short_description: "Audit progress claims against plans and evidence"
   default_prompt: "Use $xmemo-audit-progress to verify this progress report against the approved plan."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "xmemo"
+      description: "XMemo authenticated memory tools"
+      transport: "streamable_http"
+      url: "https://xmemo.dev/mcp"

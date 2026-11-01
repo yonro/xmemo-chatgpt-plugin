@@ -2,3 +2,11 @@ interface:
   display_name: "XMemo Handoff Work"
   short_description: "Prepare and reconcile restart-ready agent handoffs"
   default_prompt: "Use $xmemo-handoff-work to prepare a verified handoff for the next agent."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "xmemo"
+      description: "XMemo authenticated memory tools"
+      transport: "streamable_http"
+      url: "https://xmemo.dev/mcp"

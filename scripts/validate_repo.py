@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
-"""Validate the public XMemo OpenAI plugin repository without third-party packages."""
-
+"""Check documented OpenAI package constraints, not portal approval or runtime parity."""
 from __future__ import annotations
 
 import json
 import re
 import sys
-from pathlib import Path
-
+import unicodedata
+from pathlib import Path, PurePosixPath
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
-PLUGIN = ROOT / "plugins" / "xmemo"
-MANIFEST = PLUGIN / ".codex-plugin" / "plugin.json"
-MARKETPLACE = ROOT / ".agents" / "plugins" / "marketplace.json"
-SUBMISSION = ROOT / "submission" / "chatgpt-app-submission.json"
+PUBLISHED_NAME = "app-6a112deb1d4881919bde555b7c16b24b"
 EXPECTED_SCHEMA = "https://developers.openai.com/apps-sdk/schemas/chatgpt-app-submission.v1.json"
 SEMVER = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 SECRET_PATTERNS = {
@@ -23,129 +20,183 @@ SECRET_PATTERNS = {
     "Reviewer password": re.compile(r"(?i)reviewer.{0,32}password\s*[:=]"),
 }
 EXPECTED_SKILLS = {
-    "xmemo-memory-steward",
-    "xmemo-brainstorm",
-    "xmemo-plan-project",
-    "xmemo-review-plan",
-    "xmemo-audit-progress",
-    "xmemo-distill-session",
-    "xmemo-resume-work",
-    "xmemo-handoff-work",
+    "xmemo-memory-steward", "xmemo-brainstorm", "xmemo-plan-project",
+    "xmemo-review-plan", "xmemo-audit-progress", "xmemo-distill-session",
+    "xmemo-resume-work", "xmemo-handoff-work",
 }
-UNSUPPORTED_OPENAI_TOOLS = {
-    "get_project_context",
-    "create_pending_decision",
-    "resolve_decision",
-}
+UNSUPPORTED_OPENAI_TOOLS = {"get_project_context", "create_pending_decision", "resolve_decision"}
+
+
+def require(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
 
 
 def load_json(path: Path) -> dict:
+    value = json.loads(path.read_text(encoding="utf-8"))
+    require(isinstance(value, dict), f"Expected JSON object: {path}")
+    return value
+
+
+def package_path(plugin: Path, relative: str) -> Path:
+    require(isinstance(relative, str) and relative.startswith("./"), "Package paths must start with ./")
+    raw = relative[2:]
+    parts = PurePosixPath(raw).parts
+    require(bool(parts) and not raw.startswith("/") and "\\" not in raw and ":" not in raw
+            and all(part not in {".", ".."} for part in parts), "Unsafe package path")
+    current = plugin
+    require(not current.is_symlink(), "Plugin root must not be a symlink")
+    for part in parts:
+        current = current / part
+        require(not current.is_symlink(), "Package symlinks are forbidden")
+    require(current.resolve().is_relative_to(plugin.resolve()), "Package path escapes root")
+    require(current.is_file(), f"Missing package file: {relative}")
+    return current
+
+
+def text_field(value: object, limit: int, label: str, single_line: bool = True) -> None:
+    require(isinstance(value, str) and bool(value.strip()) and len(value) <= limit, f"Invalid {label}")
+    require(not single_line or not any(c in value for c in "\r\n"), f"{label} must be one line")
+
+
+def https_url(value: object, label: str) -> None:
+    text_field(value, 1024, label)
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except Exception as exc:
-        raise AssertionError(f"Invalid JSON: {path.relative_to(ROOT)}: {exc}") from exc
+        parsed = urlsplit(value)
+        valid = parsed.scheme == "https" and bool(parsed.hostname) and not parsed.username and not parsed.password
+    except ValueError:
+        valid = False
+    require(bool(valid), f"{label} must be a credential-free HTTPS URL")
 
 
-def require_file(path: Path) -> None:
-    assert path.is_file(), f"Missing file: {path.relative_to(ROOT)}"
-
-
-def validate_manifest() -> str:
-    manifest = load_json(MANIFEST)
-    assert manifest.get("name") == "xmemo", "Plugin name must remain 'xmemo'"
-    version = manifest.get("version", "")
-    assert SEMVER.fullmatch(version), "Plugin version must be strict semver"
-    assert manifest.get("mcpServers") == "./.mcp.json"
-    assert manifest.get("skills") == "./skills/"
+def validate_manifest(plugin: Path) -> dict:
+    manifest = load_json(package_path(plugin, "./.codex-plugin/plugin.json"))
+    require(manifest.get("name") == PUBLISHED_NAME, "Preserve the published plugin package identity")
+    require(bool(SEMVER.fullmatch(str(manifest.get("version", "")))), "Version must be strict semver")
+    require(manifest.get("mcpServers") == "./.mcp.json", "Unexpected MCP config path")
+    require(manifest.get("skills") == "./skills/", "Unexpected skills directory")
+    require(not any(key in manifest for key in ("hooks", "apps")), "Public upload forbids hooks and app references")
+    require(not any((plugin / path).exists() for path in ("hooks", ".app.json", "plugin.json", "mcp.json")),
+            "Do not mix incompatible or duplicate package entry points")
     interface = manifest.get("interface", {})
-    assert interface.get("displayName") == "XMemo"
+    for key, limit in (("displayName", 30), ("shortDescription", 30), ("longDescription", 4000), ("developerName", 80)):
+        text_field(interface.get(key), limit, key, single_line=key != "longDescription")
+    require(interface.get("category") == "Productivity", "Unexpected listing category")
+    for key in ("websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"):
+        https_url(interface.get(key), key)
+    capabilities = interface.get("capabilities", [])
+    require(isinstance(capabilities, list) and len(capabilities) <= 20, "Invalid capabilities")
+    for capability in capabilities:
+        text_field(capability, 120, "capability")
     prompts = interface.get("defaultPrompt", [])
-    assert 1 <= len(prompts) <= 3
-    assert all(isinstance(prompt, str) and len(prompt) <= 128 for prompt in prompts)
-    for key in ("composerIcon", "logo", "logoDark"):
-        require_file(PLUGIN / interface[key].removeprefix("./"))
-    for screenshot in interface.get("screenshots", []):
-        assert screenshot.endswith(".png")
-        require_file(PLUGIN / screenshot.removeprefix("./"))
-    return version
+    require(isinstance(prompts, list) and 1 <= len(prompts) <= 3, "Expected one to three starter prompts")
+    normalized = []
+    for prompt in prompts:
+        text_field(prompt, 128, "starter prompt")
+        require("@" not in prompt, "Starter prompts must not mention an MCP server")
+        normalized.append(" ".join(unicodedata.normalize("NFKC", prompt).split()))
+    require(len(set(normalized)) == len(prompts), "Duplicate normalized starter prompts")
+    for key in ("composerIcon", "composerIconDark", "logo", "logoDark"):
+        if key in interface:
+            package_path(plugin, interface[key])
+    require("logo" in interface, "Provide a packaged logo")
+    for reference in interface.get("screenshots", []):
+        package_path(plugin, reference)
+    return manifest
 
 
-def validate_mcp() -> None:
-    config = load_json(PLUGIN / ".mcp.json")
-    server = config.get("mcpServers", {}).get("xmemo", {})
-    assert server == {"type": "http", "url": "https://xmemo.dev/mcp"}, (
-        "The packaged MCP config must contain only the production XMemo HTTP endpoint"
-    )
+def validate_mcp(plugin: Path) -> None:
+    config = load_json(package_path(plugin, "./.mcp.json"))
+    expected = {"mcpServers": {"xmemo": {
+        "type": "http", "url": "https://xmemo.dev/mcp",
+        "extensions": {"com.openai": {"auth": {
+            "type": "oauth", "baseScopes": ["memory:read", "memory:write"]}}}}}}
+    require(config == expected, "MCP config must use the reviewed hosted OAuth connection without headers or credentials")
 
 
-def validate_marketplace() -> None:
-    marketplace = load_json(MARKETPLACE)
-    matches = [item for item in marketplace.get("plugins", []) if item.get("name") == "xmemo"]
-    assert len(matches) == 1
-    entry = matches[0]
-    assert entry.get("source", {}).get("path") == "./plugins/xmemo"
-    assert entry.get("policy") == {"installation": "AVAILABLE", "authentication": "ON_INSTALL"}
-
-
-def validate_submission() -> None:
-    submission = load_json(SUBMISSION)
-    assert submission.get("$schema") == EXPECTED_SCHEMA
-    assert submission.get("schema_version") == 1
-    assert len(submission.get("tools", {})) == 20
-    assert len(submission.get("test_cases", [])) == 5
-    assert len(submission.get("negative_test_cases", [])) == 3
-
-
-def validate_skills() -> None:
-    skills_root = PLUGIN / "skills"
-    actual = {path.name for path in skills_root.iterdir() if path.is_dir()}
-    assert actual == EXPECTED_SKILLS, f"Unexpected skill set: {sorted(actual)}"
+def validate_skills(plugin: Path) -> None:
+    skills = plugin / "skills"
+    require({path.name for path in skills.iterdir() if path.is_dir()} == EXPECTED_SKILLS, "Unexpected skill set")
     for name in sorted(EXPECTED_SKILLS):
-        skill_file = skills_root / name / "SKILL.md"
-        metadata_file = skills_root / name / "agents" / "openai.yaml"
-        require_file(skill_file)
-        require_file(metadata_file)
-        text = skill_file.read_text(encoding="utf-8")
-        assert text.startswith("---\n") or text.startswith("---\r\n")
-        assert f"name: {name}" in text.split("---", 2)[1]
-        assert "[TODO:" not in text, f"{name} contains an unresolved template placeholder"
+        path = package_path(plugin, f"./skills/{name}/SKILL.md")
+        package_path(plugin, f"./skills/{name}/agents/openai.yaml")
+        text = path.read_text(encoding="utf-8")
+        parts = text.split("---", 2)
+        require(len(parts) == 3 and parts[0] == "", f"Missing frontmatter: {name}")
+        require(f"name: {name}" in parts[1] and "description:" in parts[1], f"Invalid skill metadata: {name}")
+        require("[TODO:" not in text, f"Unresolved template: {name}")
         for tool in UNSUPPORTED_OPENAI_TOOLS:
-            assert f"`{tool}`" not in text, f"{name} references unavailable tool {tool}"
-    assert not (PLUGIN / "hooks").exists(), "The initial OpenAI plugin release must remain Hook-free"
+            require(f"`{tool}`" not in text, f"Unavailable tool in {name}: {tool}")
 
 
-def scan_secrets() -> None:
-    ignored_parts = {".git", "dist", "build", "__pycache__"}
-    text_suffixes = {".json", ".md", ".py", ".ps1", ".yml", ".yaml", ".txt", ".toml"}
-    findings: list[str] = []
-    for path in ROOT.rglob("*"):
-        if not path.is_file() or ignored_parts.intersection(path.parts) or path.suffix.lower() not in text_suffixes:
+def package_files(plugin: Path) -> list[Path]:
+    """Fail closed on unexpected inputs; never silently ship local files."""
+    files = []
+    for path in sorted(plugin.rglob("*")):
+        require(not path.is_symlink(), "Package symlinks are forbidden")
+        if not path.is_file():
+            continue
+        relative = path.relative_to(plugin)
+        parts = relative.parts
+        allowed = relative.as_posix() in {".codex-plugin/plugin.json", ".mcp.json"}
+        allowed |= len(parts) >= 3 and parts[0] == "skills" and parts[1] in EXPECTED_SKILLS and (
+            path.suffix == ".md" or parts[2:] == ("agents", "openai.yaml"))
+        allowed |= len(parts) == 2 and parts[0] == "assets" and path.suffix == ".png"
+        require(allowed, f"Unexpected package input: {relative}")
+        package_path(plugin, "./" + relative.as_posix())
+        files.append(path)
+    return files
+
+
+def validate_submission(root: Path) -> None:
+    """Check the historical 2026-08-01 snapshot; this is not a live contract."""
+    snapshot = load_json(root / "submission/chatgpt-app-submission.json")
+    require(snapshot.get("$schema") == EXPECTED_SCHEMA and snapshot.get("schema_version") == 1, "Unexpected historical submission format")
+    require(len(snapshot.get("tools", {})) == 20, "Historical submission tool inventory changed")
+    require(len(snapshot.get("test_cases", [])) == 5 and len(snapshot.get("negative_test_cases", [])) == 3,
+            "Historical submission case inventory changed")
+
+
+def scan_secrets(root: Path) -> None:
+    ignored = {".git", "dist", "build", "__pycache__", ".venv"}
+    for path in root.rglob("*"):
+        if ignored.intersection(path.relative_to(root).parts) or path.is_symlink() or not path.is_file():
+            continue
+        if path.suffix.lower() not in {".json", ".md", ".py", ".ps1", ".yml", ".yaml", ".txt", ".toml"}:
             continue
         if path.resolve() == Path(__file__).resolve():
             continue
-        text = path.read_text(encoding="utf-8", errors="ignore")
         for label, pattern in SECRET_PATTERNS.items():
-            if pattern.search(text):
-                findings.append(f"{label}: {path.relative_to(ROOT)}")
-    assert not findings, "Potential secrets found:\n" + "\n".join(findings)
+            require(not pattern.search(path.read_text(encoding="utf-8", errors="ignore")),
+                    f"Potential {label} in {path.relative_to(root)} (value redacted)")
+
+
+def validate_repository(root: Path = ROOT) -> str:
+    plugin = root / "plugins/xmemo"
+    manifest = validate_manifest(plugin)
+    validate_mcp(plugin)
+    validate_skills(plugin)
+    package_files(plugin)
+    marketplace = load_json(root / ".agents/plugins/marketplace.json")
+    entries = [entry for entry in marketplace.get("plugins", []) if entry.get("name") == PUBLISHED_NAME]
+    require(len(entries) == 1, "Marketplace must reference the published identity exactly once")
+    require(entries[0].get("source", {}).get("path") == "./plugins/xmemo", "Unexpected marketplace source")
+    require(entries[0].get("policy") == {"installation": "AVAILABLE", "authentication": "ON_INSTALL"}, "Unexpected marketplace policy")
+    validate_submission(root)
+    scan_secrets(root)
+    return manifest["version"]
 
 
 def main() -> int:
-    for required in (MANIFEST, MARKETPLACE, SUBMISSION, ROOT / "README.md", ROOT / "LICENSE"):
-        require_file(required)
-    version = validate_manifest()
-    validate_mcp()
-    validate_marketplace()
-    validate_submission()
-    validate_skills()
-    scan_secrets()
-    print(f"OK: XMemo plugin repository v{version} is structurally valid and secret scan is clean.")
+    version = validate_repository()
+    print(f"OK: v{version} local package constraints and historical snapshot checks passed; no credential patterns detected.")
+    print("OpenAI upload checks, skill scans, OAuth/runtime and device acceptance remain separate.")
     return 0
 
 
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except AssertionError as exc:
+    except (ValueError, OSError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         raise SystemExit(1)

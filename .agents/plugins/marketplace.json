@@ -5,7 +5,7 @@
   },
   "plugins": [
     {
-      "name": "xmemo",
+      "name": "app-6a112deb1d4881919bde555b7c16b24b",
       "source": {
         "source": "local",
         "path": "./plugins/xmemo"

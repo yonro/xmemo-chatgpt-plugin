@@ -2,7 +2,18 @@
   "mcpServers": {
     "xmemo": {
       "type": "http",
-      "url": "https://xmemo.dev/mcp"
+      "url": "https://xmemo.dev/mcp",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "oauth",
+            "baseScopes": [
+              "memory:read",
+              "memory:write"
+            ]
+          }
+        }
+      }
     }
   }
 }

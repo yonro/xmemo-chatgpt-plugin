@@ -1,6 +1,6 @@
 {
-  "name": "xmemo",
-  "version": "1.0.0",
+  "name": "app-6a112deb1d4881919bde555b7c16b24b",
+  "version": "1.0.2",
   "description": "Durable, user-controlled project memory and cross-agent continuity for ChatGPT and Codex.",
   "author": {
     "name": "Yonro",
@@ -22,7 +22,7 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "XMemo",
-    "shortDescription": "Your durable memory across AI agents.",
+    "shortDescription": "Memory across conversations",
     "longDescription": "XMemo gives ChatGPT and Codex a private, user-controlled workspace for decisions, project context, approved plans, TODOs, progress checkpoints, and handoffs. Eight professional skills help brainstorm, plan, review, audit, distill, resume, and transfer work while keeping compatible AI agents aligned through the same durable context.",
     "developerName": "Yonro",
     "category": "Productivity",
@@ -43,10 +43,9 @@
     "composerIcon": "./assets/icon-48.png",
     "logo": "./assets/logo.png",
     "logoDark": "./assets/logo-dark.png",
-    "screenshots": [
-      "./assets/01-open-todo-board-figma-2x.png",
-      "./assets/02-open-ledger-figma-2x.png",
-      "./assets/03-open-project-workspace-figma-2x.png"
-    ]
+    "supportURL": "https://xmemo.dev/support"
+  },
+  "publication": {
+    "release_notes": "XMemo 1.0.2 adds seven focused workflows alongside Memory Steward: brainstorm, plan, review, audit, distill, resume, and handoff. Includes explicit OAuth MCP configuration and validated reproducible packaging."
   }
 }
