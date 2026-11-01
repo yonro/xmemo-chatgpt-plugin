@@ -20,8 +20,7 @@ SECRET_PATTERNS = {
     "Reviewer password": re.compile(r"(?i)reviewer.{0,32}password\s*[:=]"),
 }
 EXPECTED_SKILLS = {
-    "xmemo-memory-steward", "xmemo-save-memory", "xmemo-recall-memory",
-    "xmemo-brainstorm", "xmemo-plan-project",
+    "xmemo-memory-steward", "xmemo-brainstorm", "xmemo-plan-project",
     "xmemo-review-plan", "xmemo-audit-progress", "xmemo-distill-session",
     "xmemo-resume-work", "xmemo-handoff-work",
 }

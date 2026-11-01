@@ -1,7 +1,9 @@
 # XMemo public tool routing
 
-Use only tools available in the connected XMemo plugin. Never substitute a
-nonexistent legacy or full-profile tool.
+Use only tools available on this plugin's authenticated XMemo connection. Match
+current schemas and tool names even when the host adds prefixes; do not borrow
+another connection or its credentials. Never substitute a nonexistent legacy or
+full-profile tool.
 
 ## Connection and memory lifecycle
 
