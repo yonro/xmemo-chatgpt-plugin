@@ -22,6 +22,13 @@ class SkillContractTests(unittest.TestCase):
                 self.assertTrue(target.is_relative_to(SKILLS.resolve()), (path, link))
                 self.assertTrue(target.is_file(), (path, link))
 
+    def test_steward_routes_to_packaged_companion_skills(self):
+        steward = SKILLS / 'xmemo-memory-steward/SKILL.md'
+        referenced = set(re.findall(r'\$([a-z][a-z0-9-]+)', steward.read_text()))
+        companions = {p.parent.name for p in SKILLS.glob('*/SKILL.md')}
+        companions.remove('xmemo-memory-steward')
+        self.assertEqual(referenced, companions)
+
     def test_routing_names_match_connected_inventory(self):
         path = SKILLS / 'xmemo-memory-steward/references/tool-routing.md'
         routed = set(re.findall(r'\| `([a-z_]+)` \|', path.read_text()))

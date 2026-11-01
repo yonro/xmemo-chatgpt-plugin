@@ -21,15 +21,15 @@ This repository is the public release layer for the XMemo OpenAI integration. It
 
 ## Professional skills
 
-The revised 1.0.2 candidate packages ten focused skills. Save Memory and Recall
-Memory make the basic operations explicit alongside the eight existing workflows. They share the same public XMemo tool
-contract and add no hidden tools or background automation.
+The 1.0.2 candidate packages eight skills: one general Memory Steward and seven
+focused workflows. Memory Steward handles basic saving and recall directly,
+chooses the appropriate tools, and guides specialized work to companion skills.
+All use the same public XMemo tool contract; there are no hidden tools or
+background jobs.
 
 | Skill | Workflow |
 | --- | --- |
-| `xmemo-save-memory` | Save or correct a durable personal or work memory; no project required. |
-| `xmemo-recall-memory` | Find and apply saved information on any topic, with sources and temporal filters. |
-| `xmemo-memory-steward` | Route mixed recall, save, lifecycle, and checkpoint work safely. |
+| `xmemo-memory-steward` | Save, recall, apply, correct, and manage general memory; select tools and companion skills. |
 | `xmemo-brainstorm` | Recall constraints, explore distinct options, challenge assumptions, and preserve only the approved direction. |
 | `xmemo-plan-project` | Produce evidence-gated `PROJECT_PLAN.md` and `EXECUTION_PLAN.md` artifacts. |
 | `xmemo-review-plan` | Review a proposal against saved decisions, risks, and acceptance criteria. |
@@ -49,7 +49,7 @@ activation alone does not authorize a write.
 plugins/xmemo/                         Installable XMemo plugin package
   .codex-plugin/plugin.json            Stable plugin identity and directory metadata
   .mcp.json                            Production XMemo MCP endpoint
-  skills/                              Ten focused XMemo workflows
+  skills/                              One Memory Steward and seven focused workflows
   assets/                              Icons and compliant product screenshots
 submission/                            Submitted ChatGPT review snapshot
 docs/                                  Architecture and release documentation
@@ -61,7 +61,7 @@ scripts/                               Validation and packaging tools
 ```mermaid
 flowchart LR
     A["ChatGPT or Codex"] --> P["XMemo plugin package"]
-    P --> S["Save, recall, and focused workflow skills"]
+    P --> S["Memory Steward and seven workflow skills"]
     P --> M["https://xmemo.dev/mcp"]
     M --> O["OAuth and signed user scope"]
     M --> T["XMemo tools and widgets"]

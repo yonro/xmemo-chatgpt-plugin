@@ -23,7 +23,7 @@
   "interface": {
     "displayName": "XMemo",
     "shortDescription": "Memory across conversations",
-    "longDescription": "XMemo saves and recalls your preferences, knowledge, decisions, and useful context across conversations and compatible AI agents. Ten focused skills cover everyday memory saving and recall, memory management, brainstorming, planning, plan review, progress auditing, session distillation, work resumption, and handoff. Personal memories need no project; writes follow your saving intent.",
+    "longDescription": "XMemo saves and recalls your preferences, knowledge, decisions, and useful context across conversations and compatible AI agents. One Memory Steward skill handles general memory, chooses the right tools, and guides seven focused workflows: brainstorming, planning, plan review, progress auditing, session distillation, work resumption, and handoff. Personal memories need no project; writes follow your saving intent.",
     "developerName": "Yonro",
     "category": "Productivity",
     "capabilities": [
@@ -46,6 +46,6 @@
     "supportURL": "https://xmemo.dev/support"
   },
   "publication": {
-    "release_notes": "XMemo 1.0.2 adds dedicated Save Memory and Recall Memory skills, bringing the total to ten. General memory guidance covers personal preferences, knowledge, decisions, and work context. The existing MCP endpoint and authenticated connection are preserved without ZIP auth overrides; no new server-side tools are introduced."
+    "release_notes": "XMemo 1.0.2 strengthens Memory Steward as the single entrypoint for saving, recalling, applying, and managing memory, alongside seven focused workflow skills. Preserves the existing MCP endpoint and authenticated connection without ZIP auth overrides. No new server-side tools are introduced."
   }
 }
