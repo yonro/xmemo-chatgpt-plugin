@@ -12,19 +12,24 @@ skip information.
 - [Conflict and correction rules](#conflict-and-correction-rules)
 - [Always skip](#always-skip)
 
+All write routes below require explicit saving intent or clearly authorized
+persistence. Read-only planning, review, and resume requests do not themselves
+authorize memory, checkpoint, event, TODO, or project writes. Reuse existing
+authorization; do not ask again merely because a batch contains several items.
+
 ## Decision matrix
 
 | Signal | Action |
 | --- | --- |
 | Explicit request to remember one safe, unambiguous fact | Save with `remember`, or update the existing memory |
-| Stable preference likely useful in future conversations | Save and give a short receipt |
+| Stable preference the user wants carried forward | Save and give a short receipt |
 | Final project decision with rationale | Save durable memory; record a milestone only when the decision occurrence matters |
 | Brainstorm options before a decision | Organize and review them, but do not save each option as durable truth |
 | Approved plan that will guide future work | Save the plan outcome, rationale, scope, and acceptance gate |
 | Plan review with a durable verdict | Save or update the governing decision; record the review event when history matters |
 | Progress claim from another agent | Preserve provenance, but update verified state only after reconciling suitable evidence |
 | Corrected version of an existing fact | Find and update the existing concept |
-| Multiple durable candidates extracted from a conversation | Preview the proposed set and confirm before batch writes |
+| Multiple durable candidates extracted from a conversation | Save the authorized set; preview and clarify only unresolved scope |
 | Ambiguous durability, sensitivity, interpretation, or project placement | Ask before writing |
 | Tentative option or brainstorming | Do not save as settled truth; skip or label unresolved |
 | Task pauses with meaningful work remaining | Save a resumable `update_state` checkpoint |
@@ -61,10 +66,8 @@ Natural one- or two-sentence prose is preferable when it remains equally clear.
 
 ## Batch-write consent
 
-Do not interrupt an explicit request to save one safe memory with redundant
-confirmation. Show a candidate preview before writing when:
-
-- A conversation yields several independent memories.
+Do not interrupt an explicit request to save one safe memory or a clearly scoped
+batch with redundant confirmation. Clarify unresolved scope before writing when:
 - Some candidates may be personal, sensitive, or short-lived.
 - The project or path is uncertain.
 - A candidate could overwrite or supersede an existing decision.

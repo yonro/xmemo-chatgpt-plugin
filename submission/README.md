@@ -8,3 +8,12 @@ This directory preserves the public, non-secret submission material copied from 
 - Screenshots use synthetic data and contain no reviewer credentials or private user content.
 
 Do not add reviewer passwords, OAuth codes, bearer tokens, cookies, or private test-account exports here. Private access instructions belong only in the submission portal.
+
+## Connected inventory (2026-11-01)
+
+`connected-tool-contract.json` records 21 tool names, descriptions, and exposed
+parameter names from the authenticated Codex session. It is a dated declaration
+snapshot, not a full JSON Schema or a successful execution of every tool. The
+`project` declaration abbreviates union branches, so its parameter inventory
+is null with an explicit limitation instead of falsely listing zero parameters.
+The old submission snapshot remains unchanged and must not be used as live parity.

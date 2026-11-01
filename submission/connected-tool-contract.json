@@ -1,0 +1,246 @@
+{
+  "observed_on": "2026-11-01",
+  "source": "Tool declarations exposed by the connected XMemo plugin in this Codex session; not a full runtime acceptance test",
+  "tools": {
+    "analyze_memory_text": {
+      "description": "Use this when the user asks how often an exact word or phrase appears across visible XMemo memories, optionally grouped by day, month, source, location, or type. Use search_memory when the goal is retrieval rather than counting text. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "group_by",
+        "include_examples",
+        "match_mode",
+        "max_examples",
+        "phrase",
+        "since",
+        "until"
+      ]
+    },
+    "explain_memory": {
+      "description": "Use this when the user asks why one exact memory was saved or why it matched a query after recall or search_memory. It reads retrieval and version context without changing the record. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "memory_id",
+        "query"
+      ]
+    },
+    "forget": {
+      "description": "Use this when the user explicitly asks to delete one exact memory, TODO, or Ledger transaction. Select a TODO by exact TODO ID. It defaults to recoverable soft deletion; mode='hard' is permanent and unrecoverable; requires explicit user confirmation of permanent deletion. Ambiguous targets are resolved first. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "memory_id",
+        "mode",
+        "reason",
+        "target"
+      ]
+    },
+    "get_mcp_identity": {
+      "description": "Use this when the user asks whether XMemo is connected, which account is connected, or which memory scopes were granted. It changes no state and returns no internal tenant, token, or diagnostic identifiers. This tool is part of plugin `XMemo`.",
+      "parameters": []
+    },
+    "get_project_summary": {
+      "description": "Use this when the user wants a brief status, blockers, progress, or next-actions answer for one exact authorized project. It returns concise text only; use open_project_workspace to browse or manage the project. If the project cannot be resolved exactly, do not guess\u2014direct the user to Project Workspaces Home. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "focus",
+        "project_id"
+      ]
+    },
+    "ledger": {
+      "description": "Use this when managing Ledger records. For 'I paid 199 CNY for a membership', use ledger(action='add_expense'). For current-month totals use action='summary', months=1, and owner_timezone. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "action",
+        "amount",
+        "category",
+        "currency",
+        "date_from",
+        "date_to",
+        "expected_version",
+        "item",
+        "limit",
+        "max_amount",
+        "merchant",
+        "min_amount",
+        "months",
+        "note",
+        "offset",
+        "owner_timezone",
+        "patch",
+        "payment_method",
+        "project_id",
+        "query",
+        "transaction_date",
+        "transaction_id",
+        "transaction_type"
+      ]
+    },
+    "memory_overview": {
+      "description": "Use this when the user asks for one XMemo workspace view. For a broad snapshot or what XMemo remembers without explicitly asking for counts, grouping, or recent changes, call only the default overview with no optional arguments. Use section='stats' only for an explicit count or breakdown, and section='activity' only for explicitly requested recent changes. Never call multiple sections for one broad overview request. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "activity_type",
+        "group_by",
+        "limit",
+        "memory_type",
+        "section",
+        "since",
+        "top_n",
+        "until"
+      ]
+    },
+    "open_ledger": {
+      "description": "Use this when the user wants to open the visual Ledger or external-service Renewal reminders. view=subscriptions is a compatibility value, not an XMemo plan. Requires a real IANA owner_timezone. Read-only; changes no data. Use ledger for totals, rows, or recording; widget edits run through ledger; deletion stays in Chat with confirmation. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "category",
+        "currency",
+        "date_from",
+        "date_to",
+        "owner_timezone",
+        "period",
+        "project_id",
+        "search",
+        "transaction_type",
+        "view"
+      ]
+    },
+    "open_project_workspace": {
+      "description": "Use this when the user wants to open or browse projects visually. With no project or an ambiguous name, it opens Project Workspaces Home; one unique authorized project opens its eight-tab workspace. Use get_project_summary for a concise text status, open_todo_board for standalone TODOs, and open_ledger for Ledger. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "initial_tab",
+        "project",
+        "project_id",
+        "source_mode"
+      ]
+    },
+    "open_todo_board": {
+      "description": "Use this when the user wants to open, browse, or filter TODOs visually. It requires the user's real IANA owner_timezone and only reads data; use todo(action='list') for text results, todo(create|update|complete) for writes, or forget(target=<TODO ID>) after explicit user intent to delete one exact item. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "assignee_filter",
+        "cursor",
+        "due_range",
+        "owner_timezone",
+        "project_id",
+        "search",
+        "source_filter",
+        "status_filter"
+      ]
+    },
+    "project": {
+      "description": "Use this when the user explicitly wants to create or change an authorized project or one of its memories, decisions, documents, conversations, or settings. Project/create requires name and no project_id; other actions require an exact project_id. Edits and unlinks require the matching reference and expected_version; memory edits use memory_ref (never memory_id). Use open_project_workspace or get_project_summary for reads. This tool is part of plugin `XMemo`.",
+      "parameters": null,
+      "schema_note": "Declaration abbreviates action-specific union branches with open objects; parameter inventory is unavailable, not empty. Inspect the current action schema and tool description."
+    },
+    "read_memory": {
+      "description": "Use this when the user wants more content from one exact memory or Document already identified by recall or search_memory (a Document reference is 'document:<id>'). It returns one bounded character page with pagination metadata, can start at a Document heading anchor, and never returns raw embeddings; use recall_context when several memories are needed together. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "anchor",
+        "limit",
+        "memory_id",
+        "offset",
+        "ordinal",
+        "version"
+      ]
+    },
+    "recall": {
+      "description": "Use this when the user refers to something they saved and a quick best-effort lookup is enough. It returns a few relevance-ranked memories; use search_memory for strict targeted matching or recall_context for a bounded multi-memory context pack. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "hypothetical_answer",
+        "limit",
+        "query",
+        "query_mode",
+        "since",
+        "time_order",
+        "until"
+      ]
+    },
+    "recall_context": {
+      "description": "Use this when an answer, task restart, or handoff needs several relevant memories in one bounded context pack. max_items and max_tokens limit the read-only result; use recall for a quick best-effort lookup or search_memory for strict targeted matching. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "hypothetical_answer",
+        "max_items",
+        "max_tokens",
+        "query",
+        "query_mode",
+        "since",
+        "time_order",
+        "until"
+      ]
+    },
+    "record_event": {
+      "description": "Use this when the user explicitly wants to record one significant milestone, decision, or handoff in the XMemo timeline so recent work can be reconstructed. Use remember for durable facts or preferences and update_state for the current resumable checkpoint. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "bucket",
+        "content",
+        "event_type",
+        "scope",
+        "session_id"
+      ]
+    },
+    "remember": {
+      "description": "Use this when the user explicitly asks to remember something or clearly states durable information they want carried forward. Skip transient chat and sensitive secrets. Use Ledger, not generic memory, for financial records. Existing project paths attach, but a missing project must first be created with project(entity='project', action='create'). This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "content",
+        "path"
+      ]
+    },
+    "restore_memory": {
+      "description": "Use this when the user explicitly asks to restore or undo the recoverable soft deletion of one exact memory. Hard-deleted or redacted records cannot be restored. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "memory_id",
+        "reason"
+      ]
+    },
+    "search_memory": {
+      "description": "Use this when the user wants a targeted XMemo lookup where weak matches must not be returned as answers. It searches with strong-match semantics; use recall for a quick best-effort lookup, recall_context for several memories, or forget for deletion. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "hypothetical_answer",
+        "limit",
+        "query",
+        "query_mode",
+        "since",
+        "time_order",
+        "until"
+      ]
+    },
+    "todo": {
+      "description": "Use this when the user wants to create, update, complete, or list authorized XMemo TODOs, or explicitly requests a recoverable bulk soft-delete. For action='list', provide the user's real IANA owner_timezone (for example, Asia/Tokyo) unless a saved owner profile supplies it. list rejects mutation-only fields and item_status must be open, in_progress, completed, or all. create requires client_mutation_id; update requires todo_id, expected_version, and client_mutation_id. delete_all requires explicit confirmation and confirm_delete_all=true. Use open_todo_board for visual browsing and forget(target=<TODO ID>) to delete one exact item. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "action",
+        "client_mutation_id",
+        "confirm_delete_all",
+        "content",
+        "cursor",
+        "due_at",
+        "due_before",
+        "expected_version",
+        "item_status",
+        "limit",
+        "note",
+        "owner_timezone",
+        "priority",
+        "project_id",
+        "query",
+        "search",
+        "status",
+        "title",
+        "todo_id"
+      ]
+    },
+    "update_memory": {
+      "description": "Use this when the user asks to correct, revise, move, or reclassify one exact saved memory already identified by recall or search_memory. It preserves revision history. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "content",
+        "memory_id",
+        "memory_type",
+        "path"
+      ]
+    },
+    "update_state": {
+      "description": "Use this when the user wants to save or refresh one resumable checkpoint with the current task, next action, or blocker. It versions the same scoped state slot; use remember for durable facts or record_event for history. ttl_seconds=0 means no expiry. This tool is part of plugin `XMemo`.",
+      "parameters": [
+        "blocked_reason",
+        "bucket",
+        "content",
+        "current_task",
+        "next_action",
+        "scope",
+        "state_key",
+        "ttl_seconds"
+      ]
+    }
+  }
+}

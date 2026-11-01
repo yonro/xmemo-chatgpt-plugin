@@ -1,6 +1,7 @@
 # XMemo workflow playbooks
 
-Read only the playbook needed for the current request.
+Read only the playbook needed for the current request. Persistence steps apply
+only when saving is authorized under [memory-policy.md](memory-policy.md).
 
 ## Contents
 
@@ -22,7 +23,7 @@ Read only the playbook needed for the current request.
    - active project state and next action.
 3. Remove raw dialogue, repetition, transient details, logs, and sensitive data.
 4. Search for existing versions of each durable concept.
-5. Preview the proposed batch when multiple writes or ambiguity are present.
+5. Preview and clarify unresolved scope; reuse authorization for a clear batch.
 6. Route confirmed outcomes:
    - new durable concept → `remember`;
    - changed concept → `update_memory`;
@@ -94,7 +95,8 @@ older checkpoint.
 
 ## Cross-conversation or cross-agent handoff
 
-Write the checkpoint first, then record a `handoff` event. Add a TODO only when
+For an authorized saved handoff, write the checkpoint first, then record a
+`handoff` event if recording the occurrence is also requested. Add a TODO only when
 there is a concrete follow-up with meaningful ownership.
 
 ```text

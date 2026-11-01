@@ -37,7 +37,7 @@ Use these gates when creating or revising a formal plan. Omit a gate only when i
 ## 6. Safety gate
 
 - Security, privacy, access, destructive changes, data migration, and sensitive information are addressed.
-- User confirmation points are explicit for irreversible or externally visible operations.
+- Required authorization is explicit for consequential operations; existing user authorization is reused.
 - Existing unrelated work is preserved.
 
 ## 7. Handoff gate
