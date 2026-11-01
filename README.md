@@ -21,7 +21,7 @@ This repository is the public release layer for the XMemo OpenAI integration. It
 
 ## Professional skills
 
-The 1.0.2 candidate packages eight skills: one general Memory Steward and seven
+The 1.0.2 candidate packages seven skills: one general Memory Steward and six
 focused workflows. Memory Steward handles basic saving and recall directly,
 chooses the appropriate tools, and guides specialized work to companion skills.
 All use the same public XMemo tool contract; there are no hidden tools or
@@ -35,8 +35,7 @@ background jobs.
 | `xmemo-review-plan` | Review a proposal against saved decisions, risks, and acceptance criteria. |
 | `xmemo-audit-progress` | Verify progress claims against plans, files, tests, deployments, and other evidence. |
 | `xmemo-distill-session` | Convert an important conversation into durable decisions, actions, and unfinished state. |
-| `xmemo-resume-work` | Reconstruct a verified Resume Brief and continue from one exact next action. |
-| `xmemo-handoff-work` | Prepare or reconcile restart-ready handoffs across compatible agents. |
+| `xmemo-work-continuity` | Resume work, prepare a handoff, or reconcile a received handoff with verified state and next action. |
 
 This package intentionally contains no Hooks. Checkpoints and memory
 writes require explicit saving intent or clearly authorized persistence; skill
@@ -49,7 +48,7 @@ activation alone does not authorize a write.
 plugins/xmemo/                         Installable XMemo plugin package
   .codex-plugin/plugin.json            Stable plugin identity and directory metadata
   .mcp.json                            Production XMemo MCP endpoint
-  skills/                              One Memory Steward and seven focused workflows
+  skills/                              One Memory Steward and six focused workflows
   assets/                              Icons and compliant product screenshots
 submission/                            Submitted ChatGPT review snapshot
 docs/                                  Architecture and release documentation
@@ -61,7 +60,7 @@ scripts/                               Validation and packaging tools
 ```mermaid
 flowchart LR
     A["ChatGPT or Codex"] --> P["XMemo plugin package"]
-    P --> S["Memory Steward and seven workflow skills"]
+    P --> S["Memory Steward and six workflow skills"]
     P --> M["https://xmemo.dev/mcp"]
     M --> O["OAuth and signed user scope"]
     M --> T["XMemo tools and widgets"]
@@ -105,4 +104,5 @@ MIT. See [LICENSE](LICENSE).
 
 ## Version 1.0.2
 
-See [release changes and acceptance status](docs/RELEASE_1.0.2.md). The package is a development candidate until OpenAI scans and real-client acceptance are complete.
+See [release changes and acceptance status](docs/RELEASE_1.0.2.md) and the
+[guidelines audit](docs/GUIDELINES_AUDIT_1.0.2.md). The package is a development candidate until OpenAI scans and real-client acceptance are complete.

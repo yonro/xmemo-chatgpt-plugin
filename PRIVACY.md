@@ -1,6 +1,10 @@
 # Privacy
 
-XMemo stores only information that an authorized user asks the connected AI experience to save or manage. The plugin connects to the hosted XMemo MCP service through OAuth and operates within the signed-in user's authorized workspace.
+The plugin sends task-relevant queries and authorized memory operations to XMemo.
+Its skills exclude restricted data and raw transcripts from tool payloads.
+The hosted service also processes account and limited technical service data as
+described in the canonical privacy policy; local skill rules alone do not prove
+server-side enforcement. The plugin connects to the hosted XMemo MCP service through OAuth and operates within the signed-in user's authorized workspace.
 
 The canonical public privacy policy is available at:
 

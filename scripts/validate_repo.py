@@ -22,7 +22,7 @@ SECRET_PATTERNS = {
 EXPECTED_SKILLS = {
     "xmemo-memory-steward", "xmemo-brainstorm", "xmemo-plan-project",
     "xmemo-review-plan", "xmemo-audit-progress", "xmemo-distill-session",
-    "xmemo-resume-work", "xmemo-handoff-work",
+    "xmemo-work-continuity",
 }
 UNSUPPORTED_OPENAI_TOOLS = {"get_project_context", "create_pending_decision", "resolve_decision"}
 

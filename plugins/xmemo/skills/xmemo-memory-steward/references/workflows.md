@@ -95,8 +95,9 @@ older checkpoint.
 
 ## Cross-conversation or cross-agent handoff
 
-For an authorized saved handoff, write the checkpoint first, then record a
-`handoff` event if recording the occurrence is also requested. Add a TODO only when
+For an authorized saved handoff, write the checkpoint first, then record an
+event only if that occurrence is also authorized. A saved brief records handoff
+preparation, not completed delivery or receipt. Add a TODO only when
 there is a concrete follow-up with meaningful ownership.
 
 ```text

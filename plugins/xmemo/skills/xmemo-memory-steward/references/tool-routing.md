@@ -5,6 +5,9 @@ current schemas and tool names even when the host adds prefixes; do not borrow
 another connection or its credentials. Never substitute a nonexistent legacy or
 full-profile tool.
 
+Apply [plugin boundaries](plugin-boundaries.md) to inputs and outputs before
+calling these tools; do not route prohibited content through another tool.
+
 ## Connection and memory lifecycle
 
 | Intent | Tool |
@@ -34,7 +37,7 @@ full-profile tool.
 | Save or replace resumable working state | `update_state` |
 | Record a completed milestone, decision occurrence, or handoff event | `record_event` |
 | Create, update, complete, or list action items | `todo` |
-| Manage transactions or subscriptions | `ledger` |
+| Record expenses or inspect existing subscription history | `ledger` |
 | Create or mutate an authorized project entity | `project` |
 
 Formal project creation requires:
@@ -75,6 +78,12 @@ runtime success. Use only exposed parameters. Search scope in query text is
 not an authorization filter. For temporal reads, follow
 [temporal-queries.md](temporal-queries.md).
 
+- `remember` can supersede a matching saved preference; it is not guaranteed
+  append-only. Use `update_memory` for an explicitly identified correction,
+  preserve unrelated facts, and reconcile ambiguous matches before replacing.
+- `ledger` records expenses and reads existing subscription history; it does not
+  execute financial transfers or sell subscriptions. Do not call retired
+  subscription creation, editing, or transition actions.
 - `todo`: create needs `client_mutation_id`; update needs `todo_id`,
   `expected_version`, and `client_mutation_id`. List needs the real IANA
   `owner_timezone` unless the saved owner profile supplies it. Do not send

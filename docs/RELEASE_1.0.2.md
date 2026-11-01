@@ -9,21 +9,23 @@ This document describes the current candidate, not OpenAI approval or deployment
 | --- | --- | --- |
 | Identity | `app-6a112deb1d4881919bde555b7c16b24b` | Same identity |
 | Version | 1.0.1 | 1.0.2 |
-| Skills | Memory Steward | One Memory Steward plus seven focused workflows |
+| Skills | Memory Steward | One Memory Steward plus six focused workflows |
 | Basic memory | General steward | Explicit save, recall, correction, application, and tool-routing guidance in the same steward |
-| Focused workflows | Not packaged | Brainstorm, plan, review, audit, distill, resume, handoff |
+| Focused workflows | Not packaged | Brainstorm, plan, review, audit, distill, work continuity (resume and handoff) |
 | Connection | Existing Platform authentication | Same endpoint; no ZIP authentication override |
 | Runtime | Hosted XMemo service | Existing service; no added server-side tools |
 
 The original eight-skill candidate mentioned save/recall tools but emphasized
 advanced project workflows in its UI and did not give the basic operations a
 complete workflow. The fix strengthens the existing steward rather than creating
-separate save and recall skills. The package must contain exactly eight skills.
+separate save and recall skills. Resume and handoff are subsequently consolidated
+into one Work Continuity skill,
+so the final package contains seven skills.
 
 ## One general memory entrypoint
 
 Memory Steward decides when relevant context should be recalled, when saving is
-authorized, which tool to use, and when one of the seven companion skills is
+authorized, which tool to use, and when one of the six companion skills is
 appropriate. Ordinary personal preferences, knowledge, decisions, lessons, and
 procedures do not require a project or another skill. Retrieved information is
 applied when useful; exact saved-fact corrections update the existing concept.
@@ -61,12 +63,13 @@ Omitting an override reuses the saved connection; it does not set auth to none.
 Authentication changes belong in the existing app connection.
 
 Regressions reject authentication overrides, endpoint drift, and custom headers,
-and inspect the actual ZIP. No runtime service change or deployment is required.
+and inspect the actual ZIP. This authentication packaging fix itself requires
+no runtime deployment. The later guidelines audit found separate runtime gaps.
 
 ## Validation and submission
 
 Run `python scripts/validate_repo.py`, `python -m unittest discover -s tests -v`,
-and skill-creator format validation for all eight skills. Build with
+and skill-creator format validation for all seven skills. Build with
 `python scripts/package_plugin.py v1.0.2`; upload the rebuilt
 `dist/xmemo-plugin-v1.0.2.zip`, not a previously downloaded candidate.
 
@@ -81,8 +84,10 @@ widgets on desktop/mobile. Local and synthetic tests do not replace these gates.
 
 The public plugin repository owns packaging, skills, assets, tests, and ZIPs.
 The `memory-os` repository owns tools, OAuth, persistence, and hosted widgets.
-This change requires no main-service edits. Service changes, if discovered in
-acceptance, require a separate runtime PR.
+The guidelines audit found separate runtime issues, including the `remember`
+overwrite annotation. Service fixes belong in separate runtime PRs and require
+service validation and deployment; updating the ZIP alone cannot apply them.
+See the audit for their current status and remaining acceptance gates.
 
 ## Official references
 
@@ -97,11 +102,15 @@ acceptance, require a separate runtime PR.
 - All 16 regression tests passed, including exact package inventory, required
   steward, companion-skill reference resolution, temporal examples, connection
   preservation, and deterministic packaging.
-- All eight skill-creator format checks passed; repository and diff checks passed.
-- Inspected the built ZIP: eight skills, version 1.0.2, original identity, and
+- All seven skill-creator format checks passed; repository and diff checks passed.
+- Inspected the built ZIP: seven skills, version 1.0.2, original identity, and
   endpoint-only MCP declaration. No separate save or recall skill remains.
 - Independent read-only inspection confirmed the general steward handles basic
   save/recall/correction and routes plan critique to the existing review skill.
   No unavailable Claude tools or slash commands remain in packaged instructions.
 - These are local checks and instruction review, not live XMemo mutations,
   installed-model activation, hosted-runtime acceptance, or portal approval.
+
+
+See [the complete guidelines audit](GUIDELINES_AUDIT_1.0.2.md) for the latest
+requirement coverage, fixes, source/runtime distinctions, and remaining gates.

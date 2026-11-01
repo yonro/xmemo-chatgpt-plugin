@@ -88,9 +88,10 @@ class PackageTests(unittest.TestCase):
                 keys = []
                 json.loads(archive.read(name), object_pairs_hook=lambda pairs: keys.extend(k for k, _ in pairs) or dict(pairs))
                 self.assertFalse({'auth', 'authentication', 'headers'}.intersection(keys))
-            self.assertEqual(sum(name.endswith('/SKILL.md') for name in archive.namelist()), 8)
+            self.assertEqual(sum(name.endswith('/SKILL.md') for name in archive.namelist()), 7)
             self.assertIn('skills/xmemo-memory-steward/SKILL.md', archive.namelist())
             self.assertIn('skills/xmemo-memory-steward/agents/openai.yaml', archive.namelist())
+            self.assertIn('skills/xmemo-work-continuity/SKILL.md', archive.namelist())
 
     def test_metadata_limits(self):
         p=self.plugin / '.codex-plugin/plugin.json'

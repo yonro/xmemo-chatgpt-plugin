@@ -1,7 +1,8 @@
 # XMemo memory policy
 
 Use this reference to decide whether to save, update, checkpoint, preview, or
-skip information.
+skip information. Apply [plugin boundaries](plugin-boundaries.md) first; user
+consent does not waive the restricted-data exclusions.
 
 ## Contents
 
@@ -37,7 +38,7 @@ authorization; do not ask again merely because a batch contains several items.
 | Concrete future action | Create or update a `todo` |
 | Casual chat or one-turn detail | Skip |
 | Secret, credential, or highly sensitive identifier | Never save |
-| Financial transaction or subscription | Use `ledger`, not generic memory |
+| Expense record or existing subscription history | Use supported `ledger` actions; never execute payments or create subscriptions |
 
 ## Durable memory quality
 
@@ -117,5 +118,6 @@ new permanent memory for every intermediate step.
 - Raw transcripts and verbatim conversation archives.
 - Long terminal output, stack traces, or code dumps.
 - Passwords, API keys, bearer tokens, cookies, authorization or MFA codes.
+- PCI-regulated payment-card data and protected health information (PHI).
 - Payment identifiers, government identifiers, or unrelated personal data.
 - Unconfirmed claims presented as verified facts.

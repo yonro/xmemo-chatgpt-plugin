@@ -23,7 +23,7 @@
   "interface": {
     "displayName": "XMemo",
     "shortDescription": "Memory across conversations",
-    "longDescription": "XMemo saves and recalls your preferences, knowledge, decisions, and useful context across conversations and compatible AI agents. One Memory Steward skill handles general memory, chooses the right tools, and guides seven focused workflows: brainstorming, planning, plan review, progress auditing, session distillation, work resumption, and handoff. Personal memories need no project; writes follow your saving intent.",
+    "longDescription": "XMemo saves and recalls your preferences, knowledge, decisions, and useful context across conversations and compatible AI agents. One Memory Steward handles general memory and tool selection. Six focused skills cover brainstorming, planning, plan review, progress auditing, session distillation, and work continuity, including resume and handoff. Personal memories need no project; writes follow your saving intent.",
     "developerName": "Yonro",
     "category": "Productivity",
     "capabilities": [
@@ -35,9 +35,9 @@
     "privacyPolicyURL": "https://xmemo.dev/legal/privacy",
     "termsOfServiceURL": "https://xmemo.dev/legal/tos",
     "defaultPrompt": [
-      "Remember this information for future conversations.",
-      "What did I previously save about this topic?",
-      "Bring me up to speed on my current project."
+      "Remember that I prefer concise answers in Chinese.",
+      "What preferences have I saved about how you should answer?",
+      "Help me resume the work I saved most recently."
     ],
     "brandColor": "#7C3AED",
     "composerIcon": "./assets/icon-48.png",
@@ -46,6 +46,6 @@
     "supportURL": "https://xmemo.dev/support"
   },
   "publication": {
-    "release_notes": "XMemo 1.0.2 strengthens Memory Steward as the single entrypoint for saving, recalling, applying, and managing memory, alongside seven focused workflow skills. Preserves the existing MCP endpoint and authenticated connection without ZIP auth overrides. No new server-side tools are introduced."
+    "release_notes": "XMemo 1.0.2 strengthens Memory Steward and adds six focused workflow skills. Work Continuity combines resume and handoff. Shared rules clarify data boundaries and saving authorization. Reuses the existing authenticated MCP connection without ZIP auth overrides; no new server-side tools."
   }
 }

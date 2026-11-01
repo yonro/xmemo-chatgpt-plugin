@@ -10,6 +10,11 @@ memory requests here; select a companion skill only when its specialized
 workflow is needed. XMemo carries personal preferences, knowledge, decisions,
 lessons, procedures, and work context across conversations and compatible agents.
 
+Before any tool call, read and apply [plugin boundaries](references/plugin-boundaries.md),
+including restrictions on health records, payment-card data, government IDs,
+credentials, unnecessary context, and commerce. These apply to queries and
+returned content as well as writes.
+
 ## When to recall, save, or stay quiet
 
 - Recall when the user asks what was saved, refers to earlier discussions or
@@ -112,7 +117,7 @@ A recall-only request never authorizes a write.
 | Active resumable checkpoint | `update_state` |
 | Significant milestone or handoff occurrence | `record_event` |
 | Explicit formal-project creation or authorized project mutation | `project` |
-| Financial transaction | `ledger` |
+| Expense or financial record (no payment execution) | `ledger` |
 
 For example, "记住：我偏好简洁的中文回答" can use
 `remember(content="The user prefers concise answers in Chinese.", path="preferences")`.
@@ -133,8 +138,7 @@ set for ordinary save/recall requests.
 | Critique a proposed plan | `$xmemo-review-plan` |
 | Verify progress claims against current evidence | `$xmemo-audit-progress` |
 | Extract several durable outcomes from a session | `$xmemo-distill-session` |
-| Recover verified state and continue unfinished work | `$xmemo-resume-work` |
-| Prepare or reconcile a transfer across sessions/agents | `$xmemo-handoff-work` |
+| Resume work, prepare a handoff, or reconcile a received handoff | `$xmemo-work-continuity` |
 
 For authorized checkpoint saves, use one scoped state slot with objective,
 verified status, completed work, decisions, artifacts, blocker, and next action.
