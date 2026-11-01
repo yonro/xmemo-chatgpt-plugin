@@ -68,6 +68,10 @@ The plugin is the versioned installable product. The MCP service is its hosted r
 
 Add this repository as a plugin marketplace, then install XMemo (`app-6a112deb1d4881919bde555b7c16b24b`) from the `XMemo` marketplace. Authentication is completed through XMemo OAuth at install or first connection; never place credentials in this repository.
 
+For updates to the existing Platform app, the ZIP preserves the MCP endpoint
+and omits authentication overrides so the saved connection is reused. Manage
+authentication through the existing app; do not add `auth.type: "none"`.
+
 The public ChatGPT listing is distributed through OpenAI's plugin directory after review. A repository checkout is not required for directory users.
 
 ## Validation

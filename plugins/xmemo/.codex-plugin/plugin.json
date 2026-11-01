@@ -46,6 +46,6 @@
     "supportURL": "https://xmemo.dev/support"
   },
   "publication": {
-    "release_notes": "XMemo 1.0.2 adds seven focused workflows alongside Memory Steward: brainstorm, plan, review, audit, distill, resume, and handoff. Includes explicit OAuth MCP configuration and validated reproducible packaging."
+    "release_notes": "XMemo 1.0.2 adds seven focused workflows alongside Memory Steward: brainstorm, plan, review, audit, distill, resume, and handoff. Reuses the existing authenticated MCP connection without a ZIP auth override; includes validated reproducible packaging."
   }
 }

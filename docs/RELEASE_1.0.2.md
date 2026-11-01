@@ -10,7 +10,7 @@ assert a new hosted-service deployment or OpenAI approval.
 | Identity | `app-6a112deb1d4881919bde555b7c16b24b` | Same identity, version 1.0.2 |
 | Skills | Memory Steward | Steward plus brainstorm, plan, review, audit, distill, resume, handoff |
 | Source | Downloaded Platform release | Public `yonro/xmemo-chatgpt-plugin` repository |
-| MCP declaration | Hosted connection managed by Platform; absent from release ZIP | Explicit production HTTP endpoint and OAuth declaration |
+| MCP declaration | Hosted connection managed by Platform; absent from release ZIP | Same production HTTP endpoint; reuse saved authentication without a ZIP override |
 | Format | `.codex-plugin/plugin.json` | Same officially supported compatibility format |
 | Metadata | Published listing and prompts | Bounded subtitle, support URL, icons and workflow prompts |
 | Validation | Platform checks for published version | Local package checks and negative regression tests; new Platform scans still required |
@@ -23,10 +23,12 @@ they were not in the downloaded published 1.0.1 ZIP. Local repository version
 ## Standards decisions
 
 OpenAI explicitly supports the Codex compatibility manifest and `.mcp.json`.
-Using that supported format avoids asserting conformance to the portable MCP
-schema that rejects OpenAI's documented OAuth extensions. OAuth remains explicit;
-no authentication downgrade or credentials are included. The endpoint remains
-`https://xmemo.dev/mcp` and registration details remain discoverable.
+The package preserves the existing server name, endpoint, and published plugin
+identity. Authentication is already configured on the existing Platform app;
+the ZIP must not redeclare it. `.mcp.json` contains only the HTTP type and
+`https://xmemo.dev/mcp` endpoint. Omitting the override reuses saved authentication;
+it does not set authentication to `none` or change server-side authorization.
+Authentication changes belong in the existing app connection.
 
 Local checks implement the relevant documented constraints; they do not replace
 OpenAI's uploader, security scans, or review. The historical 20-tool snapshot in
@@ -63,7 +65,7 @@ This package update does not require changing the service implementation.
 
 ## Local results (2026-11-01)
 
-Repository validation passed, 11 package safety/reproducibility and skill contract tests passed,
+Repository validation passed, 14 package safety/reproducibility and skill contract tests passed,
 versioned ZIP built successfully, and `git diff --check` passed. Each skill now
 declares its MCP dependency and an explicit untrusted-content/authorization
 boundary. These results do not establish model routing quality or live acceptance.
@@ -110,3 +112,20 @@ activation, reasoning, or runtime mutation behavior. Before release, test:
 The candidate is locally validated, not certified issue-free or approved for
 publication. Resolve the outstanding acceptance items above and the portal gates
 before describing it as release-ready.
+
+
+## Existing-connection upload correction (2026-11-01)
+
+The first candidate was rejected by the portal with "Keep the existing MCP
+connection": the app already had authentication configured, but the ZIP added
+`extensions.com.openai.auth`. Local tests incorrectly required that override,
+so their passing result did not establish upload compatibility.
+
+The corrected candidate removes the auth override, retains the existing MCP
+endpoint and package identity, and rejects auth declarations in both the
+manifest and MCP config. Regression tests cover the original OAuth override,
+`none`/mixed/API-key/empty overrides, endpoint changes, custom headers, and the
+actual ZIP contents. Version 1.0.2 remains unreleased; the corrected artifact
+replaces the rejected candidate. Re-upload it to the same existing app and
+check the new portal results. This fix does not change the hosted service or
+claim that the corrected ZIP has passed the portal check before re-upload.
