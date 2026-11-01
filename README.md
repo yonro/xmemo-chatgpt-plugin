@@ -24,13 +24,13 @@ This repository is the public release layer for the XMemo OpenAI integration. It
 The 1.0.2 candidate packages seven skills: one general Memory Steward and six
 focused workflows. Memory Steward handles basic saving and recall directly,
 chooses the appropriate tools, and guides specialized work to companion skills.
-All use the same public XMemo tool contract; there are no hidden tools or
-background jobs.
+All use the same public XMemo tool contract. This package adds no server-side
+tools, hooks, or background jobs.
 
 | Skill | Workflow |
 | --- | --- |
 | `xmemo-memory-steward` | Save, recall, apply, correct, and manage general memory; select tools and companion skills. |
-| `xmemo-brainstorm` | Recall constraints, explore distinct options, challenge assumptions, and preserve only the approved direction. |
+| `xmemo-brainstorm` | Recall constraints, explore distinct options, challenge assumptions, and preserve only authorized outcomes. |
 | `xmemo-plan-project` | Produce evidence-gated `PROJECT_PLAN.md` and `EXECUTION_PLAN.md` artifacts. |
 | `xmemo-review-plan` | Review a proposal against saved decisions, risks, and acceptance criteria. |
 | `xmemo-audit-progress` | Verify progress claims against plans, files, tests, deployments, and other evidence. |
@@ -49,7 +49,7 @@ plugins/xmemo/                         Installable XMemo plugin package
   .codex-plugin/plugin.json            Stable plugin identity and directory metadata
   .mcp.json                            Production XMemo MCP endpoint
   skills/                              One Memory Steward and six focused workflows
-  assets/                              Icons and compliant product screenshots
+  assets/                              Icons and review screenshots
 submission/                            Submitted ChatGPT review snapshot
 docs/                                  Architecture and release documentation
 scripts/                               Validation and packaging tools
@@ -67,7 +67,7 @@ flowchart LR
     T --> D["User-controlled XMemo workspace"]
 ```
 
-The plugin is the versioned installable product. The MCP service is its hosted runtime. They are released and tested together, but deploy independently so packaging changes do not duplicate or fork server logic.
+The plugin is the versioned installable product. The MCP service is its hosted runtime. Their compatibility must be checked together; they deploy independently so packaging changes do not duplicate or fork server logic.
 
 ## Install for local evaluation
 

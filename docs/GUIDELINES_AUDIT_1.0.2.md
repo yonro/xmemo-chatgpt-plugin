@@ -27,8 +27,8 @@ current runtime, permissions, or accepted listing.
 | Basic save/recall discovery was weak. | Retained one general Memory Steward; starter prompts and descriptions explicitly cover ordinary preferences, recall, and resume. No separate save/recall skills. |
 | Ledger routing could imply unsupported subscription mutations or actual financial execution. | Restricted routing to expense records and existing subscription history; explicitly excludes payment execution and retired subscription writes. |
 | Existing authenticated app uploads reject ZIP authentication overrides. | Preserved endpoint-only `.mcp.json`, original package identity, and saved app authentication. Regression tests reject overrides and connection drift. |
-| `remember` can supersede an existing preference but advertised an additive annotation and omitted that side effect. | Main-service correction tracked separately. Skills now disclose that `remember` is not append-only and prefer exact-target updates for corrections. A ZIP cannot change hosted annotations. |
-| Optional service redaction does not establish an unconditional restricted-data boundary. | Tracked as a service gap; skill instructions alone do not close it. Pattern-based filtering cannot establish complete PHI or all-identifier coverage. |
+| `remember` can supersede an existing preference but advertised an additive annotation and omitted that side effect. | Corrected in main-service [PR #372](https://github.com/yunze7373/memory-os/pull/372), pending review and deployment. Skills now disclose that `remember` is not append-only and prefer exact-target updates for corrections. A ZIP cannot change hosted annotations. |
+| Optional service redaction does not establish an unconditional restricted-data boundary. | Recorded as a runtime defense-in-depth limitation. The package prohibits these data; additional automatic input filtering is deferred from this package change. The guidelines do not prescribe a universal classifier, and pattern-based filtering cannot establish complete PHI or all-identifier coverage. |
 
 ## Skill consolidation
 
@@ -63,14 +63,14 @@ local checks. It does not mean the installed host or production service passed.
 | Fair play | No instructions to disparage or override competing plugins, host rules, or user choices. Recalled text is untrusted evidence, not authority. |
 | Third-party access | Uses the existing authenticated XMemo endpoint. No unofficial pass-through, scraping dependency, or rate-limit bypass in the package. External source use still requires authorization. |
 | Privacy policy publication | Privacy URL returned HTTP 200 without credentials or redirect. Policy contains categories, purposes, recipients, retention criteria, and user controls. Actual processing, retention execution, and backup/log alignment require operator verification; the URL check proves reachability only. |
-| Data minimization and restricted data | Shared instructions prohibit restricted categories in queries, writes, and redistribution. Source audit found additional service work needed; local instructions and regex coverage cannot justify a blanket compliance claim. |
+| Data minimization and restricted data | Shared instructions prohibit restricted categories in queries, writes, and redistribution. Source audit identified limits in optional server redaction; additional filtering is deferred. Local instructions and regex coverage cannot justify a blanket compliance claim. |
 | Regulated sensitive data | Requires necessity, adequate consent, and disclosure before collection; unclear cases stay unsent. User consent cannot override restricted-data exclusions. |
 | Tracking transparency and user control | Source separates account/technical processing from deliberately saved memories; corrected the repository privacy summary accordingly. Production telemetry, controls, and policy alignment were not exhaustively audited. |
 | Commerce and monetization | No plans, checkout links, upsells, advertisements, money transfers, or investment execution in the package. Inspected MCP/widget paths reject retired subscription writes. Ledger recordkeeping is distinct from selling subscriptions. Price parity and all deployed entitlement messages remain operational checks. |
 | Prohibited goods/services and checkout | No commerce workflow supplied; shared rules exclude prohibited activities. Checkout requirements are inapplicable to this package's recordkeeping behavior. Any future commerce feature needs a fresh review. |
 | Developer verification and support | Metadata names Yonro and provides support URL/email; support URL returned 200. Platform verification, business affiliation, IP rights, and actual support responsiveness require publisher/portal confirmation. |
 | Tool names and descriptions | 21 declared tools have purpose-oriented descriptions and defined schemas. Corrected skill routing; `remember` overwrite disclosure needs the separate service fix. |
-| Tool independence and exposure | No external plugin dependency or discovery/schema-fetch generic executor found. Action-based tools expose their schemas for review; this finding does not pre-approve every future action. |
+| Tool independence and exposure | No external plugin dependency or discovery/schema-fetch generic executor found. Action-based tools expose their schemas directly; review must still assess their per-operation exposure against the guideline. No claim of platform acceptance is made. |
 | Correct annotations | All 21 descriptors have explicit `readOnlyHint`, `destructiveHint`, and `openWorldHint`; 12 read-only and 9 write tools. `remember` had a reproduced overwrite mismatch requiring a service fix. Undo/version history does not exempt overwrites. |
 | Minimal inputs | Public profile filters undeclared/private fields. No raw conversation array or required precise-location field in inspected public schemas. Skills send targeted context; IANA timezone for chronology is not GPS/address collection. |
 | Predictable behavior and retries | Skills disclose version/idempotency requirements and reconcile uncertain writes. `remember` has no client mutation ID. Local source tests cover profile/input constraints; hosted retry behavior still needs acceptance. |
@@ -107,6 +107,20 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_repo.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/package_plugin.py v1.0.2
 git diff --check
 ```
+
+## Separate service correction
+
+[Main-service PR #372](https://github.com/yunze7373/memory-os/pull/372) changes
+`remember` annotations and descriptions to disclose existing overwrite behavior;
+it does not change memory business logic or add tools. It remains a draft and
+has not been merged or deployed. Its 189 focused tests passed. The required local
+quick CI passed 7 of 11 checks; 4 frontend/Docs checks could not pass because root
+frontend dependencies and generated assets were absent. No thresholds were lowered.
+
+Additional restricted-input hardening was explored, then deferred to keep this
+package delivery scoped. No second service PR was created; unfinished edits were
+removed from the main-service checkout. This does not establish production data
+handling compliance or remove the policy requirement to exclude restricted data.
 
 ## Acceptance still required
 
