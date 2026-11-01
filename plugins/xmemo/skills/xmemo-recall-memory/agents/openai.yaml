@@ -1,0 +1,15 @@
+interface:
+  display_name: "XMemo Recall Memory"
+  short_description: "Find and apply memories across conversations"
+  default_prompt: "Use $xmemo-recall-memory to find what I previously saved about this topic."
+
+policy:
+  allow_implicit_invocation: true
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "xmemo"
+      description: "XMemo authenticated memory tools"
+      transport: "streamable_http"
+      url: "https://xmemo.dev/mcp"

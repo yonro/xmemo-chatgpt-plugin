@@ -8,7 +8,7 @@ assert a new hosted-service deployment or OpenAI approval.
 | Area | Published 1.0.1 | 1.0.2 candidate |
 | --- | --- | --- |
 | Identity | `app-6a112deb1d4881919bde555b7c16b24b` | Same identity, version 1.0.2 |
-| Skills | Memory Steward | Steward plus brainstorm, plan, review, audit, distill, resume, handoff |
+| Skills | Memory Steward | Ten skills: dedicated save and recall, steward, brainstorm, plan, review, audit, distill, resume, handoff |
 | Source | Downloaded Platform release | Public `yonro/xmemo-chatgpt-plugin` repository |
 | MCP declaration | Hosted connection managed by Platform; absent from release ZIP | Same production HTTP endpoint; reuse saved authentication without a ZIP override |
 | Format | `.codex-plugin/plugin.json` | Same officially supported compatibility format |
@@ -44,7 +44,7 @@ Before publication, upload to the existing plugin draft, verify that the MCP
 declaration retains the existing connection, and resolve all required findings.
 Preserve and verify saved translations, availability, review cases and demo URL.
 Run five positive and three negative cases with a dedicated review account;
-confirm OAuth, current tool scan parity, desktop/mobile UI and all eight skills.
+confirm OAuth, current tool scan parity, desktop/mobile UI and all ten skills.
 Provide reviewer access through the secure dashboard, never this repository.
 No local check establishes those external acceptance results.
 
@@ -71,7 +71,7 @@ declares its MCP dependency and an explicit untrusted-content/authorization
 boundary. These results do not establish model routing quality or live acceptance.
 
 
-## Eight-skill review (2026-11-01)
+## Initial eight-skill review (2026-11-01; superseded by basic-memory review below)
 
 All eight entrypoints and their supporting references were reviewed. The steward
 now routes mixed memory/lifecycle work without repeating the seven focused
@@ -129,3 +129,73 @@ actual ZIP contents. Version 1.0.2 remains unreleased; the corrected artifact
 replaces the rejected candidate. Re-upload it to the same existing app and
 check the new portal results. This fix does not change the hosted service or
 claim that the corrected ZIP has passed the portal check before re-upload.
+
+
+## Revised 1.0.2 after withdrawal of submission
+
+The maintainer cancelled the submission on 2026-11-01 and requested that these
+changes remain in 1.0.2. No 1.0.3 release is being prepared.
+
+## Basic memory gap and correction
+
+The initial 1.0.2 candidate exposed save/recall tools and mentioned them inside Memory Steward,
+but had no focused basic-memory skills. Its steward UI description and starter
+prompt emphasized advanced project workflows. Tool existence did not establish
+that everyday save/recall was discoverable or adequately guided.
+
+The revised 1.0.2 candidate adds `xmemo-save-memory` and `xmemo-recall-memory` (ten skills total).
+They cover personal preferences, knowledge, decisions, lessons, and procedures
+without requiring a project. The steward remains the general coordinator for
+mixed recall/save and lifecycle work. Plugin starter prompts expose basic save
+and recall directly. Simple authorized saves do not require redundant approval;
+recall-only requests do not write; corrections use exact existing records.
+
+## Claude reference and ChatGPT adaptation
+
+Reviewed `xmemo-claude-plugin` commit
+`271f537c6898fa78b3c81c68d0dc1bb4c2cbd2a5`, especially
+`skills/memory-steward/SKILL.md`. Adapted its useful-context recall, application
+of saved preferences, explicit correction, stable organization, and truthful
+receipts. Do not copy its host-specific commands, unavailable tools, automatic
+checkpoint writes, or redundant batch confirmation into ChatGPT.
+
+The connected ChatGPT tools already provide `remember(content, path)`, exact
+`update_memory`, `recall`, `search_memory`, `recall_context`, and `read_memory`.
+No server changes or deployment are required. Preserve the existing endpoint,
+plugin identity, and omission of ZIP authentication overrides.
+
+## Validation
+
+Run repository validation, package tests, and skill-creator validation for all
+ten skills. Build with `python scripts/package_plugin.py v1.0.2`; output is
+`dist/xmemo-plugin-v1.0.2.zip`. Rebuild the 1.0.2 artifact after validation; do not reuse the earlier eight-skill ZIP.
+
+Static checks establish packaging and reference integrity, not model activation
+or live persistence. Use synthetic fixtures for instruction walkthroughs and a
+dedicated review account for actual save/read/update acceptance. Never test
+writes against the maintainer's real memories without an explicit test scope.
+
+Required acceptance scenarios: simple Chinese/English save; clear batch; exact
+correction; known duplicate; secret exclusion; summary-only no-write; personal
+recall; strict no-match; paginated document; local-date and latest ordering;
+retrieved instruction injection; failed or uncertain tool results. Confirm both
+automatic selection and explicit skill invocation after installation. Portal
+scans and real-client end-to-end tests remain separate release gates.
+
+
+### Revised-candidate results (2026-11-01)
+
+- 15 regression tests passed, including missing-basic-skill rejection and actual
+  ZIP inventory checks; all ten skill-creator format validations passed.
+- Repository validation, deterministic packaging, and diff checks passed. The
+  archive contains version 1.0.2, ten skills, and the endpoint-only MCP config.
+- An independent instruction-only walkthrough selected the save skill for a
+  Chinese preference, exact correction, and partially failed two-item batch;
+  the recall skill for empty lookup, Tokyo yesterday, untrusted retrieved text,
+  and paginated Document reading; and no memory tool for a summary-only request.
+- The walkthrough identified two wording gaps. The final skills now explicitly
+  preserve uncertainty after an empty reconciliation of a timed-out write and
+  pin returned document versions on subsequent pages. Static checks were rerun
+  after these clarifications; the walkthrough is not a live execution test.
+- No real memories were read or mutated for the synthetic scenarios. Platform
+  activation, scans, and review-account read/write acceptance remain unverified.

@@ -1,15 +1,17 @@
 <div align="center">
   <img src="plugins/xmemo/assets/logo.png" alt="XMemo" width="112" />
   <h1>XMemo for ChatGPT and Codex</h1>
-  <p><strong>Durable project memory and cross-agent continuity.</strong></p>
+  <p><strong>Save and recall memory across conversations.</strong></p>
 </div>
 
-XMemo gives ChatGPT and Codex a private, user-controlled workspace for work that should survive a single conversation. Preserve decisions, project context, approved plans, TODOs, progress checkpoints, and handoff briefs; recall what matters when work resumes; and keep compatible AI agents aligned through the same XMemo account.
+XMemo gives ChatGPT and Codex user-controlled memory for personal preferences, useful knowledge, decisions, and work that should survive a single conversation. Preserve decisions, project context, approved plans, TODOs, progress checkpoints, and handoff briefs; recall what matters when work resumes; and keep compatible AI agents aligned through the same XMemo account.
 
-This repository is the public release layer for the XMemo OpenAI integration. It packages the installable plugin identity, the XMemo Memory Steward skill, product metadata, screenshots, submission evidence, and release automation. The production MCP service, OAuth flow, tool handlers, and hosted widget resources remain in the private `memory-os` runtime so there is one authoritative server implementation.
+This repository is the public release layer for the XMemo OpenAI integration. It packages the installable plugin identity, the XMemo memory skills, product metadata, screenshots, submission evidence, and release automation. The production MCP service, OAuth flow, tool handlers, and hosted widget resources remain in the private `memory-os` runtime so there is one authoritative server implementation.
 
 ## What it enables
 
+- Save personal preferences, useful knowledge, decisions, and lessons for later conversations.
+- Recall what you previously saved, with relevant sources and honest handling of missing or stale results.
 - Resume a project from its latest verified state instead of reconstructing context from chat history.
 - Save durable decisions and rationale without archiving raw transcripts.
 - Review a new plan or another agent's progress against previously approved context.
@@ -19,11 +21,14 @@ This repository is the public release layer for the XMemo OpenAI integration. It
 
 ## Professional skills
 
-The 1.0.2 candidate packages eight focused skills. Published 1.0.1 contains only Memory Steward. They share the same public XMemo tool
+The revised 1.0.2 candidate packages ten focused skills. Save Memory and Recall
+Memory make the basic operations explicit alongside the eight existing workflows. They share the same public XMemo tool
 contract and add no hidden tools or background automation.
 
 | Skill | Workflow |
 | --- | --- |
+| `xmemo-save-memory` | Save or correct a durable personal or work memory; no project required. |
+| `xmemo-recall-memory` | Find and apply saved information on any topic, with sources and temporal filters. |
 | `xmemo-memory-steward` | Route mixed recall, save, lifecycle, and checkpoint work safely. |
 | `xmemo-brainstorm` | Recall constraints, explore distinct options, challenge assumptions, and preserve only the approved direction. |
 | `xmemo-plan-project` | Produce evidence-gated `PROJECT_PLAN.md` and `EXECUTION_PLAN.md` artifacts. |
@@ -34,7 +39,8 @@ contract and add no hidden tools or background automation.
 | `xmemo-handoff-work` | Prepare or reconcile restart-ready handoffs across compatible agents. |
 
 This package intentionally contains no Hooks. Checkpoints and memory
-writes occur only through an explicit user request or an active skill workflow.
+writes require explicit saving intent or clearly authorized persistence; skill
+activation alone does not authorize a write.
 
 ## Repository layout
 
@@ -43,7 +49,7 @@ writes occur only through an explicit user request or an active skill workflow.
 plugins/xmemo/                         Installable XMemo plugin package
   .codex-plugin/plugin.json            Stable plugin identity and directory metadata
   .mcp.json                            Production XMemo MCP endpoint
-  skills/                              Eight professional XMemo workflows
+  skills/                              Ten focused XMemo workflows
   assets/                              Icons and compliant product screenshots
 submission/                            Submitted ChatGPT review snapshot
 docs/                                  Architecture and release documentation
@@ -55,7 +61,7 @@ scripts/                               Validation and packaging tools
 ```mermaid
 flowchart LR
     A["ChatGPT or Codex"] --> P["XMemo plugin package"]
-    P --> S["Memory Steward skill"]
+    P --> S["Save, recall, and focused workflow skills"]
     P --> M["https://xmemo.dev/mcp"]
     M --> O["OAuth and signed user scope"]
     M --> T["XMemo tools and widgets"]
@@ -99,4 +105,4 @@ MIT. See [LICENSE](LICENSE).
 
 ## Version 1.0.2
 
-See [release comparison and acceptance status](docs/RELEASE_1.0.2.md). The package is a development candidate until OpenAI scans and real-client acceptance are complete.
+See [release changes and acceptance status](docs/RELEASE_1.0.2.md). The package is a development candidate until OpenAI scans and real-client acceptance are complete.

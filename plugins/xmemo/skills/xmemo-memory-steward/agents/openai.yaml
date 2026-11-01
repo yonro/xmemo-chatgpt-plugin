@@ -1,7 +1,7 @@
 interface:
   display_name: "XMemo Memory Steward"
-  short_description: "Brainstorm, review plans, resume, and hand off"
-  default_prompt: "Use $xmemo-memory-steward to recall cross-agent context, organize this brainstorm, review the plan and evidence, and preserve the approved outcome or next checkpoint."
+  short_description: "Recall, save, and manage memory across conversations"
+  default_prompt: "Use $xmemo-memory-steward to recall relevant saved context and save the new information I ask to carry forward."
 
 policy:
   allow_implicit_invocation: true

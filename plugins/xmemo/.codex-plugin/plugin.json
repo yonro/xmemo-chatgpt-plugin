@@ -1,7 +1,7 @@
 {
   "name": "app-6a112deb1d4881919bde555b7c16b24b",
   "version": "1.0.2",
-  "description": "Durable, user-controlled project memory and cross-agent continuity for ChatGPT and Codex.",
+  "description": "User-controlled memory across conversations: save and recall preferences, knowledge, decisions, and work context.",
   "author": {
     "name": "Yonro",
     "email": "support@xmemo.dev",
@@ -23,7 +23,7 @@
   "interface": {
     "displayName": "XMemo",
     "shortDescription": "Memory across conversations",
-    "longDescription": "XMemo gives ChatGPT and Codex a private, user-controlled workspace for decisions, project context, approved plans, TODOs, progress checkpoints, and handoffs. Eight professional skills help brainstorm, plan, review, audit, distill, resume, and transfer work while keeping compatible AI agents aligned through the same durable context.",
+    "longDescription": "XMemo saves and recalls your preferences, knowledge, decisions, and useful context across conversations and compatible AI agents. Ten focused skills cover everyday memory saving and recall, memory management, brainstorming, planning, plan review, progress auditing, session distillation, work resumption, and handoff. Personal memories need no project; writes follow your saving intent.",
     "developerName": "Yonro",
     "category": "Productivity",
     "capabilities": [
@@ -35,9 +35,9 @@
     "privacyPolicyURL": "https://xmemo.dev/legal/privacy",
     "termsOfServiceURL": "https://xmemo.dev/legal/tos",
     "defaultPrompt": [
-      "Bring me up to speed on my current project.",
-      "Save the decisions and next actions from this conversation.",
-      "Review this plan against what we previously decided."
+      "Remember this information for future conversations.",
+      "What did I previously save about this topic?",
+      "Bring me up to speed on my current project."
     ],
     "brandColor": "#7C3AED",
     "composerIcon": "./assets/icon-48.png",
@@ -46,6 +46,6 @@
     "supportURL": "https://xmemo.dev/support"
   },
   "publication": {
-    "release_notes": "XMemo 1.0.2 adds seven focused workflows alongside Memory Steward: brainstorm, plan, review, audit, distill, resume, and handoff. Reuses the existing authenticated MCP connection without a ZIP auth override; includes validated reproducible packaging."
+    "release_notes": "XMemo 1.0.2 adds dedicated Save Memory and Recall Memory skills, bringing the total to ten. General memory guidance covers personal preferences, knowledge, decisions, and work context. The existing MCP endpoint and authenticated connection are preserved without ZIP auth overrides; no new server-side tools are introduced."
   }
 }

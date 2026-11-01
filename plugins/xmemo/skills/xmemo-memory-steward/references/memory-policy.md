@@ -70,7 +70,8 @@ Do not interrupt an explicit request to save one safe memory or a clearly scoped
 batch with redundant confirmation. Clarify unresolved scope before writing when:
 - Some candidates may be personal, sensitive, or short-lived.
 - The project or path is uncertain.
-- A candidate could overwrite or supersede an existing decision.
+- The target or intended replacement of an existing decision is unclear; an
+  explicit correction to an exact record already authorizes that change.
 - A review would promote an agent-generated draft or progress claim to approved
   or verified status.
 - The distinction between a settled decision and an unresolved idea is unclear.
