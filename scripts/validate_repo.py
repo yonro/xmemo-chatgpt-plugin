@@ -69,8 +69,21 @@ def https_url(value: object, label: str) -> None:
     require(bool(valid), f"{label} must be a credential-free HTTPS URL")
 
 
+def reject_auth_overrides(value: object) -> None:
+    """This package updates an app whose authentication is managed in Platform."""
+    if isinstance(value, dict):
+        require(not {"auth", "authentication"}.intersection(value),
+                "Keep the existing MCP connection: remove ZIP auth overrides; manage authentication in the existing app")
+        for child in value.values():
+            reject_auth_overrides(child)
+    elif isinstance(value, list):
+        for child in value:
+            reject_auth_overrides(child)
+
+
 def validate_manifest(plugin: Path) -> dict:
     manifest = load_json(package_path(plugin, "./.codex-plugin/plugin.json"))
+    reject_auth_overrides(manifest)
     require(manifest.get("name") == PUBLISHED_NAME, "Preserve the published plugin package identity")
     require(bool(SEMVER.fullmatch(str(manifest.get("version", "")))), "Version must be strict semver")
     require(manifest.get("mcpServers") == "./.mcp.json", "Unexpected MCP config path")
@@ -107,11 +120,10 @@ def validate_manifest(plugin: Path) -> dict:
 
 def validate_mcp(plugin: Path) -> None:
     config = load_json(package_path(plugin, "./.mcp.json"))
+    reject_auth_overrides(config)
     expected = {"mcpServers": {"xmemo": {
-        "type": "http", "url": "https://xmemo.dev/mcp",
-        "extensions": {"com.openai": {"auth": {
-            "type": "oauth", "baseScopes": ["memory:read", "memory:write"]}}}}}}
-    require(config == expected, "MCP config must use the reviewed hosted OAuth connection without headers or credentials")
+        "type": "http", "url": "https://xmemo.dev/mcp"}}}
+    require(config == expected, "Preserve the existing MCP endpoint without auth overrides, headers, or connection changes")
 
 
 def validate_skills(plugin: Path) -> None:

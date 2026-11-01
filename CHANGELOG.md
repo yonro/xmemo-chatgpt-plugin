@@ -4,6 +4,9 @@ All notable changes to XMemo for ChatGPT and Codex are documented here.
 
 ## [1.0.2] - Unreleased
 
+- Fix existing-app uploads by removing the ZIP authentication override while
+  preserving the MCP endpoint and saved connection; add packaging regressions.
+
 - Add seven focused professional skills for brainstorming, project planning,
   plan review, progress audit, session distillation, work resumption, and
   cross-agent handoff.
