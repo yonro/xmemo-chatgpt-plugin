@@ -21,22 +21,21 @@ This repository is the public release layer for the XMemo OpenAI integration. It
 
 ## Professional skills
 
-The 1.0.2 candidate packages eight skills: one general Memory Steward and seven
+The 1.0.2 candidate packages seven skills: one general Memory Steward and six
 focused workflows. Memory Steward handles basic saving and recall directly,
 chooses the appropriate tools, and guides specialized work to companion skills.
-All use the same public XMemo tool contract; there are no hidden tools or
-background jobs.
+All use the same public XMemo tool contract. This package adds no server-side
+tools, hooks, or background jobs.
 
 | Skill | Workflow |
 | --- | --- |
 | `xmemo-memory-steward` | Save, recall, apply, correct, and manage general memory; select tools and companion skills. |
-| `xmemo-brainstorm` | Recall constraints, explore distinct options, challenge assumptions, and preserve only the approved direction. |
+| `xmemo-brainstorm` | Recall constraints, explore distinct options, challenge assumptions, and preserve only authorized outcomes. |
 | `xmemo-plan-project` | Produce evidence-gated `PROJECT_PLAN.md` and `EXECUTION_PLAN.md` artifacts. |
 | `xmemo-review-plan` | Review a proposal against saved decisions, risks, and acceptance criteria. |
 | `xmemo-audit-progress` | Verify progress claims against plans, files, tests, deployments, and other evidence. |
 | `xmemo-distill-session` | Convert an important conversation into durable decisions, actions, and unfinished state. |
-| `xmemo-resume-work` | Reconstruct a verified Resume Brief and continue from one exact next action. |
-| `xmemo-handoff-work` | Prepare or reconcile restart-ready handoffs across compatible agents. |
+| `xmemo-work-continuity` | Resume work, prepare a handoff, or reconcile a received handoff with verified state and next action. |
 
 This package intentionally contains no Hooks. Checkpoints and memory
 writes require explicit saving intent or clearly authorized persistence; skill
@@ -49,8 +48,8 @@ activation alone does not authorize a write.
 plugins/xmemo/                         Installable XMemo plugin package
   .codex-plugin/plugin.json            Stable plugin identity and directory metadata
   .mcp.json                            Production XMemo MCP endpoint
-  skills/                              One Memory Steward and seven focused workflows
-  assets/                              Icons and compliant product screenshots
+  skills/                              One Memory Steward and six focused workflows
+  assets/                              Icons and review screenshots
 submission/                            Submitted ChatGPT review snapshot
 docs/                                  Architecture and release documentation
 scripts/                               Validation and packaging tools
@@ -61,14 +60,14 @@ scripts/                               Validation and packaging tools
 ```mermaid
 flowchart LR
     A["ChatGPT or Codex"] --> P["XMemo plugin package"]
-    P --> S["Memory Steward and seven workflow skills"]
+    P --> S["Memory Steward and six workflow skills"]
     P --> M["https://xmemo.dev/mcp"]
     M --> O["OAuth and signed user scope"]
     M --> T["XMemo tools and widgets"]
     T --> D["User-controlled XMemo workspace"]
 ```
 
-The plugin is the versioned installable product. The MCP service is its hosted runtime. They are released and tested together, but deploy independently so packaging changes do not duplicate or fork server logic.
+The plugin is the versioned installable product. The MCP service is its hosted runtime. Their compatibility must be checked together; they deploy independently so packaging changes do not duplicate or fork server logic.
 
 ## Install for local evaluation
 
@@ -105,4 +104,5 @@ MIT. See [LICENSE](LICENSE).
 
 ## Version 1.0.2
 
-See [release changes and acceptance status](docs/RELEASE_1.0.2.md). The package is a development candidate until OpenAI scans and real-client acceptance are complete.
+See [release changes and acceptance status](docs/RELEASE_1.0.2.md) and the
+[guidelines audit](docs/GUIDELINES_AUDIT_1.0.2.md). The package is a development candidate until OpenAI scans and real-client acceptance are complete.

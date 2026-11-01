@@ -6,15 +6,16 @@ All notable changes to XMemo for ChatGPT and Codex are documented here.
 
 - Strengthen the single Memory Steward skill to guide general saving, recall,
   correction, context application, and tool selection without requiring a project.
-- Keep eight skills: Memory Steward and seven focused workflows, following the
-  Claude plugin's general-entrypoint design with ChatGPT-specific tool routing.
+- Keep one general Memory Steward; combine resume and handoff into Work Continuity,
+  leaving six focused companion skills and seven skills in total.
+- Clarify saving authorization at each write step and share restricted-data,
+  data-minimization, and commerce boundaries across all workflows.
 - Make basic memory capabilities visible in the steward metadata and starter prompts.
 - Fix existing-app uploads by removing the ZIP authentication override while
   preserving the MCP endpoint and saved connection; add packaging regressions.
 
-- Add seven focused professional skills for brainstorming, project planning,
-  plan review, progress audit, session distillation, work resumption, and
-  cross-agent handoff.
+- Add six focused professional skills for brainstorming, project planning,
+  plan review, progress audit, session distillation, and work continuity.
 - Keep the initial OpenAI plugin package explicitly Hook-free; all memory writes
   and checkpoints remain workflow-driven and user-visible.
 

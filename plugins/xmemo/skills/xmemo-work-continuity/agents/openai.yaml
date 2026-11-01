@@ -1,0 +1,15 @@
+interface:
+  display_name: "XMemo Work Continuity"
+  short_description: "Resume work and prepare or reconcile handoffs"
+  default_prompt: "Use $xmemo-work-continuity to recover the verified state and next action for this work."
+
+policy:
+  allow_implicit_invocation: true
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "xmemo"
+      description: "XMemo authenticated memory tools"
+      transport: "streamable_http"
+      url: "https://xmemo.dev/mcp"

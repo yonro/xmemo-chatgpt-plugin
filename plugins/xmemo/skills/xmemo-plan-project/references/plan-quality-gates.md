@@ -48,4 +48,5 @@ Use these gates when creating or revising a formal plan. Omit a gate only when i
 
 ## 8. Approval gate
 
-A plan is ready for execution only when blocking findings are resolved, required evidence is available, the decision owner approves the scope, and the first phase has a testable acceptance gate.
+A plan is ready for execution only when blocking findings are resolved, required evidence is available, the decision owner has authorized the scope (including authorization already
+given in the current task), and the first phase has a testable acceptance gate.
