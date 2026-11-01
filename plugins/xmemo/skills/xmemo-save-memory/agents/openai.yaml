@@ -1,0 +1,15 @@
+interface:
+  display_name: "XMemo Save Memory"
+  short_description: "Save and correct memories across conversations"
+  default_prompt: "Use $xmemo-save-memory to save this information so I can use it in future conversations."
+
+policy:
+  allow_implicit_invocation: true
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "xmemo"
+      description: "XMemo authenticated memory tools"
+      transport: "streamable_http"
+      url: "https://xmemo.dev/mcp"

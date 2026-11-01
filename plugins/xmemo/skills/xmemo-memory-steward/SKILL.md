@@ -1,6 +1,6 @@
 ---
 name: xmemo-memory-steward
-description: Recall, save, correct, delete, or restore XMemo memories and coordinate mixed memory workflows. Use for explicit memory lifecycle requests or personal saved context; prefer the focused XMemo skills for planning, brainstorming, review, audits, distillation, resume, and handoff.
+description: Coordinate general XMemo memory across conversations, including saved preferences, knowledge, decisions, corrections, deletion, restoration, and mixed recall/save requests. Recall useful prior context when it materially affects the task; use focused save and recall skills for those individual goals.
 ---
 
 # XMemo Memory Steward
@@ -14,6 +14,8 @@ raw transcripts, or unverified claims as facts.
 
 | Dominant workflow | Companion skill |
 | --- | --- |
+| Save or correct personal or work knowledge | `$xmemo-save-memory` |
+| Recall and apply saved information on any topic | `$xmemo-recall-memory` |
 | Explore alternatives using saved context | `$xmemo-brainstorm` |
 | Create or revise project/execution plans | `$xmemo-plan-project` |
 | Review a proposed plan | `$xmemo-review-plan` |
@@ -25,6 +27,21 @@ raw transcripts, or unverified claims as facts.
 These skills use the connected tools; they do not add tools or background jobs.
 Read [tool-routing.md](references/tool-routing.md) before choosing an unfamiliar
 operation. The current connected schema takes precedence over examples.
+
+## General memory continuity
+
+Use memory beyond project management: personal preferences, definitions,
+knowledge, decisions, lessons, and procedures can all carry across sessions.
+No formal project is required. Recall relevant context when the user references
+prior discussions or when it can materially change the current task; do not
+read on every turn or for generic questions. Apply useful remembered preferences
+and briefly identify them when they influence the answer.
+
+Save when the user explicitly requests it or clearly wants information carried
+forward. Otherwise, offer to save a useful lasting outcome in one short line
+when appropriate. Never treat a workflow ending as automatic write permission.
+For explicit corrections, update the identified saved concept; do not duplicate
+it. Offer cleanup for stale or conflicting records without silently deleting.
 
 ## Read narrowly
 

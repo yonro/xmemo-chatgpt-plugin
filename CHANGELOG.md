@@ -4,6 +4,11 @@ All notable changes to XMemo for ChatGPT and Codex are documented here.
 
 ## [1.0.2] - Unreleased
 
+- Add dedicated Save Memory and Recall Memory skills for everyday personal and
+  work knowledge, bringing the package to ten skills.
+- Restore general memory discovery and continuity in the steward's UI metadata,
+  instructions, and plugin starter prompts; no project is required.
+- Reuse the existing authenticated MCP connection without auth overrides.
 - Fix existing-app uploads by removing the ZIP authentication override while
   preserving the MCP endpoint and saved connection; add packaging regressions.
 

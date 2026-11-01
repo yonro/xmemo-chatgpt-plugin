@@ -22,6 +22,15 @@ class PackageTests(unittest.TestCase):
         path = build(self.root, 'v1.0.2')
         first = path.read_bytes()
         self.assertEqual(first, build(self.root).read_bytes())
+    def test_basic_memory_skills_are_required(self):
+        for name in ('xmemo-save-memory', 'xmemo-recall-memory'):
+            with self.subTest(skill=name):
+                folder = self.plugin / 'skills' / name
+                shutil.rmtree(folder)
+                with self.assertRaisesRegex(ValueError, 'Unexpected skill set'):
+                    build(self.root)
+                shutil.copytree(ROOT / 'plugins/xmemo/skills' / name, folder)
+
     def test_tag_mismatch(self):
         with self.assertRaises(ValueError): build(self.root, '9.9.9')
         self.assertFalse((self.root / 'dist').exists())
@@ -83,7 +92,10 @@ class PackageTests(unittest.TestCase):
                 keys = []
                 json.loads(archive.read(name), object_pairs_hook=lambda pairs: keys.extend(k for k, _ in pairs) or dict(pairs))
                 self.assertFalse({'auth', 'authentication', 'headers'}.intersection(keys))
-            self.assertEqual(sum(name.endswith('/SKILL.md') for name in archive.namelist()), 8)
+            self.assertEqual(sum(name.endswith('/SKILL.md') for name in archive.namelist()), 10)
+            for skill in ('xmemo-save-memory', 'xmemo-recall-memory'):
+                self.assertIn(f'skills/{skill}/SKILL.md', archive.namelist())
+                self.assertIn(f'skills/{skill}/agents/openai.yaml', archive.namelist())
 
     def test_metadata_limits(self):
         p=self.plugin / '.codex-plugin/plugin.json'
