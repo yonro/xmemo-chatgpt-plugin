@@ -3,6 +3,9 @@
 Use these playbooks when ChatGPT helps shape reasoning or review work produced
 in ChatGPT, Claude Code, Codex, GitHub Copilot, Kiro, or another agent.
 
+Persistence in these playbooks requires authorized saving intent under
+[memory-policy.md](memory-policy.md). A review recommendation is not user approval.
+
 ## Contents
 
 - [Brainstorm and converge](#brainstorm-and-converge)
@@ -59,7 +62,8 @@ Check:
 
 Return one verdict:
 
-- `approved`: coherent and ready to execute; not evidence of implementation.
+- `recommended`: coherent for the stated scope; not user approval, execution
+  authorization, or evidence of implementation.
 - `changes_requested`: direction is viable but named issues must be fixed.
 - `blocked`: required facts, access, or decisions are missing.
 - `rejected`: the approach conflicts with the goal or unacceptable constraints.

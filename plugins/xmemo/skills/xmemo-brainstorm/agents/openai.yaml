@@ -2,3 +2,11 @@ interface:
   display_name: "XMemo Brainstorm"
   short_description: "Explore and converge ideas with durable context"
   default_prompt: "Use $xmemo-brainstorm to explore options against my saved XMemo context."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "xmemo"
+      description: "XMemo authenticated memory tools"
+      transport: "streamable_http"
+      url: "https://xmemo.dev/mcp"

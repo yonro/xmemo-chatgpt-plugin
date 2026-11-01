@@ -19,10 +19,11 @@ nonexistent legacy or full-profile tool.
 | Intent | Tool |
 | --- | --- |
 | Quick recall | `recall` |
-| Exact or scoped memory search | `search_memory` |
+| Strict targeted memory search | `search_memory` |
 | Bounded multi-memory or resume context | `recall_context` |
-| Aggregate memory statistics or activity | `memory_overview` |
-| Analyze supplied text before deciding what deserves memory | `analyze_memory_text` |
+| Read a page from one identified memory or Document | `read_memory` |
+| Requested memory overview, statistics, or activity | `memory_overview` |
+| Count an exact word or phrase across stored visible memories | `analyze_memory_text` |
 
 ## Progress and structured work
 
@@ -63,3 +64,22 @@ The ChatGPT public tool surface does not expose a dedicated restart-snapshot
 restore operation. Reconstruct a resumed session from `recall_context`,
 `get_project_summary`, relevant TODOs, and recorded events. Do not claim that
 XMemo can reopen the original ChatGPT thread.
+
+
+## Parameter and mutation discipline
+
+Read the connected schema before a call; tool availability is not proof of
+runtime success. Use only exposed parameters. Search scope in query text is
+not an authorization filter. For temporal reads, follow
+[temporal-queries.md](temporal-queries.md).
+
+- `todo`: create needs `client_mutation_id`; update needs `todo_id`,
+  `expected_version`, and `client_mutation_id`. List needs the real IANA
+  `owner_timezone` unless the saved owner profile supplies it. Do not send
+  mutation-only fields to list; use `item_status` for its status filter.
+- `project`: edits/unlinks need the matching reference and `expected_version`;
+  memory edits use `memory_ref`, not `memory_id`. Inspect action-specific
+  requirements; the session's declaration may abbreviate its union schema.
+- `open_todo_board` and `open_ledger` need the real IANA `owner_timezone`.
+- Reconcile uncertain write results before retrying. Return partial failures
+  honestly; do not imply a multi-call transaction or successful delivery.

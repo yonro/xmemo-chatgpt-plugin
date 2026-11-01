@@ -19,7 +19,7 @@ This repository is the public release layer for the XMemo OpenAI integration. It
 
 ## Professional skills
 
-The plugin ships eight focused skills. They share the same public XMemo tool
+The 1.0.2 candidate packages eight focused skills. Published 1.0.1 contains only Memory Steward. They share the same public XMemo tool
 contract and add no hidden tools or background automation.
 
 | Skill | Workflow |
@@ -33,7 +33,7 @@ contract and add no hidden tools or background automation.
 | `xmemo-resume-work` | Reconstruct a verified Resume Brief and continue from one exact next action. |
 | `xmemo-handoff-work` | Prepare or reconcile restart-ready handoffs across compatible agents. |
 
-This initial release intentionally contains no Hooks. Checkpoints and memory
+This package intentionally contains no Hooks. Checkpoints and memory
 writes occur only through an explicit user request or an active skill workflow.
 
 ## Repository layout
@@ -66,7 +66,7 @@ The plugin is the versioned installable product. The MCP service is its hosted r
 
 ## Install for local evaluation
 
-Add this repository as a plugin marketplace, then install `xmemo` from the `XMemo` marketplace. Authentication is completed through XMemo OAuth at install or first connection; never place credentials in this repository.
+Add this repository as a plugin marketplace, then install XMemo (`app-6a112deb1d4881919bde555b7c16b24b`) from the `XMemo` marketplace. Authentication is completed through XMemo OAuth at install or first connection; never place credentials in this repository.
 
 The public ChatGPT listing is distributed through OpenAI's plugin directory after review. A repository checkout is not required for directory users.
 
@@ -76,7 +76,7 @@ The public ChatGPT listing is distributed through OpenAI's plugin directory afte
 python scripts/validate_repo.py
 ```
 
-The validator checks manifests, referenced files, the MCP endpoint declaration, the submission schema, tool/test counts, and common credential patterns. GitHub Actions runs the same gate on pushes, pull requests, and version tags.
+The validator checks manifests, referenced files, the MCP endpoint declaration, the historical submission snapshot, tool/test counts, and common credential patterns. GitHub Actions runs the same gate on pushes, pull requests, and version tags.
 
 ## Release model
 
@@ -92,3 +92,7 @@ Versions use semantic versioning. A tag such as `v1.0.0` must match `plugins/xme
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## Version 1.0.2
+
+See [release comparison and acceptance status](docs/RELEASE_1.0.2.md). The package is a development candidate until OpenAI scans and real-client acceptance are complete.

@@ -2,3 +2,11 @@ interface:
   display_name: "XMemo Review Plan"
   short_description: "Review plans against saved decisions and evidence"
   default_prompt: "Use $xmemo-review-plan to review this plan against what we previously decided."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "xmemo"
+      description: "XMemo authenticated memory tools"
+      transport: "streamable_http"
+      url: "https://xmemo.dev/mcp"

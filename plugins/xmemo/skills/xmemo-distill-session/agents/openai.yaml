@@ -2,3 +2,11 @@ interface:
   display_name: "XMemo Distill Session"
   short_description: "Preserve durable outcomes from an important session"
   default_prompt: "Use $xmemo-distill-session to preserve the decisions, next actions, and unfinished state from this session."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "xmemo"
+      description: "XMemo authenticated memory tools"
+      transport: "streamable_http"
+      url: "https://xmemo.dev/mcp"

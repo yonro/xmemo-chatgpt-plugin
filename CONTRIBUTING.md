@@ -10,3 +10,5 @@
 6. Run `python scripts/validate_repo.py` before opening a pull request.
 
 Changes to server behavior must land and deploy in the runtime repository before this repository advertises or tests the new contract.
+
+Plugin changes belong in this public repository. Changes to hosted tools, OAuth, or widgets require a separate pull request in the owning runtime repository, with deployment evidence before advertising changed runtime behavior.
